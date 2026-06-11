@@ -8,14 +8,16 @@ import { useLenis } from "./SmoothScroll";
 
 /**
  * Primary navigation — a fixed, full-width translucent bar that rides above the
- * page. It lifts a soft shadow once you scroll, smooth-scrolls to each section
- * (via Lenis when present, native otherwise) and highlights the section you are
- * in with a scroll-spy. Below lg it collapses into the MobileNav slide-in sheet.
+ * page. From left to right: the logo, the inline section links (desktop only,
+ * with an active-section underline driven by a scroll-spy), and a hamburger at
+ * far right. The hamburger opens the MobileNav overlay sheet, which carries the
+ * full link set plus the reservation CTA and is the sole navigation below the
+ * desktop breakpoint (where the inline links are hidden). The bar lifts a soft
+ * shadow once you scroll, and smooth-scrolls to each section via Lenis when
+ * present, native otherwise.
  */
-// `label` is the full name (used in the vertical MobileNav sheet, which has
-// room); `short` is the condensed form for the horizontal desktop bar, where
-// the full "Garden & Philosophy" / "Celebrations & Special Events" would
-// overflow. Destinations and section headings stay full.
+// `label` is the full name shown in the overlay sheet. `short` is the condensed
+// form rendered in the inline desktop bar where horizontal space is tight.
 export const NAV_LINKS = [
   { href: "#dishes", label: "Menu" },
   { href: "#garden", label: "Garden & Philosophy", short: "Garden" },
@@ -41,14 +43,13 @@ export function SiteNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Scroll-spy: the active section is the one crossing the upper third.
+  // Scroll-spy: highlight the inline link whose section is centred in view.
   useEffect(() => {
     const ids = [...NAV_LINKS.map((l) => l.href.slice(1)), "top"];
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
     if (sections.length === 0) return;
-
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -105,7 +106,9 @@ export function SiteNav() {
           <span className="font-display text-lg tracking-tight">{BRAND.name}</span>
         </a>
 
-        <ul className="hidden items-center gap-4 xl:gap-6 lg:flex">
+        {/* Inline section links — desktop only. Below the lg breakpoint they
+            hide and the hamburger overlay carries navigation on its own. */}
+        <ul className="hidden items-center gap-4 lg:flex xl:gap-6">
           {NAV_LINKS.map((l) => {
             const isActive = active === l.href;
             return (
@@ -115,7 +118,11 @@ export function SiteNav() {
                   onClick={(e) => handleClick(e, l.href)}
                   aria-current={isActive ? "true" : undefined}
                   className="relative whitespace-nowrap text-[0.72rem] uppercase tracking-[0.1em] transition-colors duration-200 hover:text-[color:var(--color-ivory)]"
-                  style={{ color: isActive ? "var(--color-amber-bright)" : "var(--color-ivory-dim)" }}
+                  style={{
+                    color: isActive
+                      ? "var(--color-amber-bright)"
+                      : "var(--color-ivory-dim)",
+                  }}
                 >
                   {"short" in l ? l.short : l.label}
                   <span
@@ -129,17 +136,9 @@ export function SiteNav() {
           })}
         </ul>
 
-        <div className="flex items-center gap-2">
-          <a
-            href="#reserve"
-            onClick={(e) => handleClick(e, "#reserve")}
-            className="hidden whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright lg:inline-flex"
-            style={{ background: "var(--color-amber)" }}
-          >
-            Make a Reservation
-          </a>
-          <MobileNav links={NAV_LINKS} onNavigate={go} />
-        </div>
+        {/* The hamburger opens the overlay sheet — the full link set plus the
+            reservation CTA — and is the sole navigation below the lg breakpoint. */}
+        <MobileNav links={NAV_LINKS} onNavigate={go} />
       </nav>
     </header>
   );

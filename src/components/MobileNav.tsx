@@ -6,9 +6,9 @@ import { Menu, X } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 
 /**
- * Mobile / compact navigation — the counterpart to the desktop link row. A
- * hamburger opens a full-screen overlay sheet listing every section anchor plus
- * the reservation CTA.
+ * Primary navigation sheet — the site's single menu at every breakpoint. A
+ * hamburger in the bar opens a full-screen overlay listing every section anchor
+ * plus the reservation CTA.
  *
  * Robustness the small-screen sheet needs:
  *  - It is portaled to <body> and sits at a z-index above the fixed bar, the
@@ -110,7 +110,7 @@ export function MobileNav({
   }
 
   return (
-    <div className="lg:hidden">
+    <div>
       <button
         ref={triggerRef}
         type="button"
