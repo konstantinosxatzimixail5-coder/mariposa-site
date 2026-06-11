@@ -1,0 +1,368 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────────────────────
+   MARIPOSA — DESIGN TOKENS
+   Luxury = restraint. One luminous accent (amber-gold) against ink + ivory.
+   Fonts are injected as CSS vars by next/font (see layout.tsx).
+   ─────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* ── Palette — warm light (v4 art direction) ───────────────────────────────
+     Luxury = restraint on a sunlit ground. Bone & beige surfaces, deep ink text
+     (never pure black), one luminous amber accent, olive + clay for warmth. */
+  --color-bg: #f6f1e7; /* bone white — primary background */
+  --color-bg-alt: #efe7d8; /* soft beige — alternating sections */
+  --color-surface: #fffdf8; /* raised card surface */
+
+  --color-ink: #1e1b16; /* deep charcoal ink — primary text */
+  --color-ink-dim: #5b5448; /* muted ink — secondary text (AA on bone) */
+  --color-ink-soft: #efe7d8; /* light layered surface (legacy name) */
+
+  --color-aegean: #1b4d52; /* deep teal-blue */
+  --color-aegean-light: #2c6e74;
+  --color-olive: #6b7b52; /* garden green (secondary) */
+  --color-olive-light: #8a9a6f;
+  --color-clay: #b07a56; /* terracotta whisper — warmth */
+  --color-aqua: #a9d6d2; /* soft Aegean light — ambient particles */
+
+  --color-amber: #c9a86a; /* luminous accent — the butterfly */
+  --color-amber-bright: #e0c089;
+  --color-amber-deep: #8a6a30; /* legible gold for small text on light */
+
+  /* Light tokens for text/marks placed over dark imagery (hero, covers). */
+  --color-ivory: #f6f1e7;
+  --color-ivory-dim: #e6ddcf;
+
+  /* Semantic aliases */
+  --color-fg: var(--color-ink);
+  --color-on-accent: #221f18; /* text on amber/solid buttons */
+  --color-muted: color-mix(in oklab, var(--color-ink) 52%, transparent);
+  --color-line: color-mix(in oklab, var(--color-ink) 14%, transparent);
+
+  /* ── Fonts (vars supplied by next/font) ────────────────────────────────── */
+  --font-display: var(--font-fraunces), "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  /* ── Fluid type scale (clamp: min @360px → max @1440px) ────────────────── */
+  --text-xs: clamp(0.72rem, 0.69rem + 0.13vw, 0.8rem);
+  --text-sm: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1.08rem);
+  --text-lg: clamp(1.1rem, 1.02rem + 0.4vw, 1.35rem);
+  --text-xl: clamp(1.3rem, 1.15rem + 0.7vw, 1.85rem);
+  --text-2xl: clamp(1.6rem, 1.3rem + 1.4vw, 2.75rem);
+  --text-3xl: clamp(2.1rem, 1.5rem + 2.8vw, 4rem);
+  --text-4xl: clamp(2.7rem, 1.6rem + 5vw, 6rem);
+  --text-display: clamp(2.9rem, 1.6rem + 5.4vw, 6.5rem);
+
+  /* ── Easings (slow, weighty — nothing springy) ─────────────────────────── */
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ── Durations ─────────────────────────────────────────────────────────── */
+  --dur-micro: 220ms;
+  --dur-reveal: 900ms;
+  --dur-cinematic: 1300ms;
+
+  /* ── Spacing rhythm (8px base) ─────────────────────────────────────────── */
+  --space-section: clamp(5rem, 3rem + 10vw, 11rem);
+
+  /* ── Z-index scale ─────────────────────────────────────────────────────── */
+  --z-canvas: 10;
+  --z-content: 20;
+  --z-nav: 40;
+  --z-cursor: 60;
+  --z-overlay: 80;
+  --z-preloader: 100;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   BASE
+   ─────────────────────────────────────────────────────────────────────────── */
+* {
+  min-width: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color-scheme: light;
+}
+
+/* Anchored sections clear the fixed top bar when scrolled to. */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+/* Lenis drives scroll; disable native smooth so they don't fight. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  font-feature-settings: "ss01", "cv05";
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-amber) 40%, transparent);
+  color: var(--color-ink);
+}
+
+/* Alternating section ground — soft beige against the bone default. */
+.section-alt {
+  background: var(--color-bg-alt);
+}
+
+/* Three-tone section ground. The page steps through a quiet cadence of warm
+   neutrals — near-white, bone beige, then a softer/deeper beige — so adjacent
+   light sections always read as distinct bands without any hard edge. */
+.section-white {
+  background: var(--color-surface); /* #fffdf8 — near-white */
+}
+.section-beige {
+  background: var(--color-bg); /* #f6f1e7 — bone beige */
+}
+.section-beige-soft {
+  background: var(--color-bg-alt); /* #efe7d8 — softer/deeper beige */
+}
+
+/* ── Display type helpers ──────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 360;
+  letter-spacing: -0.022em;
+  line-height: 0.98;
+  /* Discretionary ligatures + old-style figures read as set type, not UI. */
+  font-feature-settings: "liga" 1, "dlig" 1, "onum" 1;
+}
+
+/* Body copy: a hair of positive tracking and a longer measure keep long-form
+   text feeling unhurried and editorial. */
+body {
+  letter-spacing: 0.005em;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Eyebrow: real small caps where the font offers them, with a tracked, tabular
+   fallback so section labels read as set type rather than shouting capitals. */
+.eyebrow {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "smcp" 1, "c2sc" 1, "tnum" 1;
+}
+
+/* Hang opening quotes and punctuation into the margin on pull-quotes (Safari);
+   harmless where unsupported. */
+.hanging-quote {
+  hanging-punctuation: first last;
+}
+
+/* Molten-gold accent. A clipped gradient gives accent words a leaf of warm
+   metal rather than a flat fill, the single luxury flourish on the page. On the
+   light ground this leans into a deeper gold so it stays legible. */
+.text-gold {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-amber-deep) 0%,
+    var(--color-amber) 46%,
+    var(--color-amber-deep) 82%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Bright gold for accent words set over dark imagery (hero, covers): a luminous
+   gradient with a soft ink halo so it reads against busy photography/video. */
+.text-gold-bright {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-amber) 0%,
+    var(--color-amber-bright) 42%,
+    var(--color-amber) 78%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 12px color-mix(in oklab, #0e0f0d 72%, transparent));
+}
+
+/* ── Dappled light through leaves ───────────────────────────────────────────
+   Two blurred, organic blob layers drift slowly across the hero like sun
+   filtered through a vine canopy. Pure CSS so it costs almost nothing and the
+   reduced-motion rule below stills it completely. `screen` blend lets the warm
+   light read only where it falls over the ink, never as flat boxes. */
+.leaf-light {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  background-repeat: no-repeat;
+}
+.leaf-light--a {
+  background-image:
+    radial-gradient(38% 24% at 22% 30%, color-mix(in oklab, var(--color-amber) 34%, transparent), transparent 70%),
+    radial-gradient(30% 18% at 70% 18%, color-mix(in oklab, var(--color-amber-bright) 26%, transparent), transparent 72%),
+    radial-gradient(24% 30% at 84% 64%, color-mix(in oklab, var(--color-olive-light) 22%, transparent), transparent 70%);
+  filter: blur(38px);
+  animation: leaf-drift-a 26s ease-in-out infinite alternate;
+}
+.leaf-light--b {
+  background-image:
+    radial-gradient(26% 18% at 40% 70%, color-mix(in oklab, var(--color-amber) 24%, transparent), transparent 72%),
+    radial-gradient(20% 26% at 12% 80%, color-mix(in oklab, var(--color-amber-bright) 20%, transparent), transparent 74%),
+    radial-gradient(30% 20% at 60% 44%, color-mix(in oklab, var(--color-olive-light) 16%, transparent), transparent 72%);
+  filter: blur(54px);
+  animation: leaf-drift-b 34s ease-in-out infinite alternate;
+}
+@keyframes leaf-drift-a {
+  0% { transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1.05); }
+  100% { transform: translate3d(4%, 3%, 0) rotate(4deg) scale(1.12); }
+}
+@keyframes leaf-drift-b {
+  0% { transform: translate3d(3%, 2%, 0) rotate(0deg) scale(1.1); }
+  100% { transform: translate3d(-4%, -3%, 0) rotate(-5deg) scale(1.02); }
+}
+
+/* Mobile-nav overlay enter / exit. CSS keyframes play automatically the moment
+   the element mounts (in) or the animation-name flips (out), so the sheet does
+   not depend on a JS frame-tick to become visible. */
+@keyframes mobile-nav-in {
+  from { opacity: 0; transform: translateX(8%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes mobile-nav-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(8%); }
+}
+
+/* A short centred hairline with a node, a quiet divider motif between ideas. */
+.rule-leaf {
+  display: inline-block;
+  width: clamp(2.5rem, 6vw, 4.5rem);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-amber) 50%,
+    transparent
+  );
+}
+
+/* ── Focus ─────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Tailwind v4 preflight leaves interactive controls at cursor:default — restore
+   the pointer everywhere so every clickable element reads as clickable. */
+button:not(:disabled),
+select,
+summary,
+[role="button"] {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FILM GRAIN — fixed full-viewport overlay, GPU-cheap, pointer-transparent
+   ─────────────────────────────────────────────────────────────────────────── */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Reveal primitive (JS adds .is-in to trigger) ──────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--dur-reveal) var(--ease-entrance),
+    transform var(--dur-reveal) var(--ease-entrance);
+  will-change: opacity, transform;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Editorial line reveal (mask + slide) ──────────────────────────────────
+   The observed wrapper keeps its full layout box (so IntersectionObserver can
+   see it), while an inner element slides up from under an overflow clip. Using
+   clip-path directly on the observed element is a trap: Chrome applies the
+   target's own clip-path to the intersection geometry, so a fully-clipped
+   element reports zero ratio and never triggers its own reveal. */
+.clip-reveal {
+  display: block;
+  overflow: clip;
+  /* Slight breathing room so descenders/italics aren't shaved by the clip. */
+  padding-bottom: 0.12em;
+}
+.clip-reveal > .clip-inner {
+  display: block;
+  transform: translateY(110%);
+  transition: transform var(--dur-cinematic) var(--ease-entrance);
+  will-change: transform;
+}
+.clip-reveal.is-in > .clip-inner {
+  transform: none;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   REDUCED MOTION — full fallback path
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .clip-reveal {
+    overflow: visible;
+  }
+  .clip-reveal > .clip-inner {
+    transform: none !important;
+  }
+  .grain {
+    display: none;
+  }
+}
