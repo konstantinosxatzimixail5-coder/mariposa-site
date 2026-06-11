@@ -15,7 +15,13 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden px-6 md:px-10"
+      // `isolate` gives the hero its own stacking context so its background
+      // layers (the -z gradient and video) stay contained and paint above the
+      // site-wide atmosphere wave (a fixed z-index:-1 layer). Without it the
+      // hero's negative-z layers fall into the root context *behind* the wave,
+      // and the cyan ripples bleed across the video. The wave is unaffected
+      // everywhere else — it still shows through the other sections.
+      className="relative isolate flex min-h-svh flex-col justify-center overflow-hidden px-6 md:px-10"
     >
       <Parallax speed={-0.25} className="absolute inset-0 -z-10">
         <div
