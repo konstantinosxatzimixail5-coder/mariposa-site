@@ -13,7 +13,7 @@
     "remotion:render": "remotion render remotion/index.ts HeroLoop public/video/hero.mp4 --codec=h264 && remotion render remotion/index.ts HeroLoop public/video/hero.webm --codec=vp9 && remotion still remotion/index.ts HeroLoop public/video/hero-poster.jpg --frame=90"
   },
   "dependencies": {
-    "next": "15.5.4",
+    "next": "15.5.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "lenis": "^1.3.11",
