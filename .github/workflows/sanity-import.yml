@@ -1,0 +1,39 @@
+name: Sanity import
+
+# Seeds the Sanity dataset (project te38hur6 / production) from the repo's
+# BRAND/FAQS content + images. Runs on GitHub's runners, which have open network
+# access — unlike the Claude Code container, whose egress allowlist blocks the
+# Sanity API. Trigger manually from the Actions tab.
+#
+# Requires a repo secret: SANITY_API_WRITE_TOKEN (Settings → Secrets and
+# variables → Actions → New repository secret). Use a Sanity *Editor* token.
+
+on:
+  workflow_dispatch:
+    inputs:
+      replace:
+        description: "Overwrite existing documents (--replace)"
+        type: boolean
+        default: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Import content into Sanity
+        env:
+          SANITY_API_WRITE_TOKEN: ${{ secrets.SANITY_API_WRITE_TOKEN }}
+        run: pnpm sanity:import ${{ inputs.replace && '--replace' || '' }}
