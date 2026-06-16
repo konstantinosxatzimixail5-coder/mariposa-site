@@ -1,0 +1,37 @@
+name: Sanity import
+
+# Seeds the Sanity dataset (project te38hur6 / production) from the repo's
+# brand.ts content + images, by running the existing `pnpm seed`
+# (sanity exec scripts/seed.ts --with-user-token). Runs on GitHub's runners,
+# which have open network access — unlike the Claude Code container, whose egress
+# allowlist blocks the Sanity API. Trigger manually from the Actions tab.
+#
+# Requires a repo secret: SANITY_AUTH_TOKEN (Settings → Secrets and variables →
+# Actions → New repository secret). Use a Sanity *Editor* (write) token from
+# https://www.sanity.io/manage → project te38hur6 → API → Tokens.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Seed content into Sanity
+        env:
+          # The Sanity CLI (sanity exec --with-user-token) authenticates with this.
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: pnpm seed
