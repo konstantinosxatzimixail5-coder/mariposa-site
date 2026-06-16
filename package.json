@@ -10,6 +10,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "seed": "sanity exec scripts/seed.ts --with-user-token",
+    "seed:ci": "tsx scripts/seed-ci.ts",
     "remotion:studio": "remotion studio remotion/index.ts",
     "remotion:render": "remotion render remotion/index.ts HeroLoop public/video/hero.mp4 --codec=h264 && remotion render remotion/index.ts HeroLoop public/video/hero.webm --codec=vp9 && remotion still remotion/index.ts HeroLoop public/video/hero-poster.jpg --frame=90"
   },
@@ -48,6 +49,7 @@
     "eslint-config-next": "15.5.4",
     "remotion": "^4.0.457",
     "tailwindcss": "^4.0.0",
+    "tsx": "^4.22.4",
     "typescript": "^5.7.3"
   }
 }
