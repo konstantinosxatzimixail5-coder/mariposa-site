@@ -160,7 +160,7 @@ export function MobileNav({
 
             <nav
               aria-label="Mobile"
-              className="flex flex-1 flex-col justify-center gap-1 px-8 py-6"
+              className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-1 px-8 py-6 text-center"
             >
               {links.map((l) => (
                 <a
@@ -171,7 +171,7 @@ export function MobileNav({
                     navigate(l.href);
                   }}
                   className="font-display py-1.5 text-ink transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
-                  style={{ fontSize: "clamp(1.5rem, 7vw, 2rem)" }}
+                  style={{ fontSize: "clamp(1.6rem, 4.5vw, 2.75rem)" }}
                 >
                   {l.label}
                 </a>
@@ -182,7 +182,7 @@ export function MobileNav({
                   e.preventDefault();
                   navigate("#reserve");
                 }}
-                className="mt-7 inline-flex w-fit rounded-full px-7 py-3.5 font-medium text-[color:var(--color-on-accent)] transition-colors duration-200 hover:bg-amber-bright"
+                className="mt-9 inline-flex rounded-full px-8 py-4 font-medium text-[color:var(--color-on-accent)] transition-colors duration-200 hover:bg-amber-bright"
                 style={{ background: "var(--color-amber)" }}
               >
                 Make a Reservation
