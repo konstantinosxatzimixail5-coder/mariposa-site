@@ -32,6 +32,7 @@ jobs:
 
       - name: Seed content into Sanity
         env:
-          # The Sanity CLI (sanity exec --with-user-token) authenticates with this.
+          # seed-ci.ts builds a Sanity client from this token explicitly (the CLI's
+          # --with-user-token doesn't reliably read env tokens in CI).
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-        run: pnpm seed
+        run: pnpm seed:ci
