@@ -4,6 +4,7 @@ import { BRAND } from "@/lib/brand";
 import { Providers } from "@/components/Providers";
 import { RestaurantSchema } from "@/components/RestaurantSchema";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const DESCRIPTION =
@@ -78,6 +79,7 @@ export default function RootLayout({
         </a>
         <Providers>{children}</Providers>
         <div className="grain" aria-hidden />
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
