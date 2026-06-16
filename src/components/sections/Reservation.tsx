@@ -2,14 +2,14 @@ import { Phone, MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { ReservationForm } from "@/components/ReservationForm";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type SiteContent } from "@/lib/brand";
 
 /**
  * Reservation. The conversion moment — a real booking form wired to
  * /api/reservations, with phone and WhatsApp kept as the always-live direct
  * path beneath it.
  */
-export function Reservation() {
+export function Reservation({ content = BRAND }: { content?: SiteContent }) {
   return (
     <section
       id="reserve"
@@ -38,19 +38,19 @@ export function Reservation() {
         </Reveal>
 
         <Reveal as="div" delay={260} className="mt-10 w-full">
-          <ReservationForm />
+          <ReservationForm occasions={content.occasions} />
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
             <span className="text-muted">Or reach us directly</span>
             <a
-              href={BRAND.phoneHref}
+              href={content.phoneHref}
               className="inline-flex items-center gap-2 text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
             >
               <Phone className="h-4 w-4" aria-hidden />
-              {BRAND.phone}
+              {content.phone}
             </a>
             <a
-              href={BRAND.whatsapp}
+              href={content.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"

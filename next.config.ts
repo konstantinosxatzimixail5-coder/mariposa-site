@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   transpilePackages: ["three"],
   images: {
     formats: ["image/avif", "image/webp"],
+    // Sanity-hosted images (dishes, services, family portraits) come from the
+    // asset CDN once content is migrated into the dataset.
+    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],

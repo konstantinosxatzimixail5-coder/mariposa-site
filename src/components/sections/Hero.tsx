@@ -2,7 +2,7 @@ import { Reveal } from "@/components/Reveal";
 import { Parallax } from "@/components/Parallax";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { HeroVideo } from "@/components/HeroVideo";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type SiteContent } from "@/lib/brand";
 
 /**
  * Hero. Stacked background layers, back to front: the CSS gradient (-z-10, the
@@ -11,7 +11,7 @@ import { BRAND } from "@/lib/brand";
  * dappled-light layer (-z-[4]) that drifts warm sun through a vine canopy across
  * the type. Copy clip-reveals on load over the top.
  */
-export function Hero() {
+export function Hero({ content = BRAND }: { content?: SiteContent }) {
   return (
     <section
       id="top"
@@ -54,13 +54,13 @@ export function Hero() {
           className="mb-6 flex items-center gap-3 text-sm uppercase tracking-[0.2em] text-amber sm:tracking-[0.25em]"
         >
           <ButterflyMark className="h-5 w-5" />
-          {BRAND.address.locality} · {BRAND.address.region}
+          {content.address.locality} · {content.address.region}
         </Reveal>
 
         <h1 className="font-display text-balance text-ivory" style={{ fontSize: "var(--text-display)" }}>
           {/* Names the entity in the page's one h1 for search/AI clarity without
               altering the visual line, which reads as the tagline. */}
-          <span className="sr-only">{BRAND.name} — </span>
+          <span className="sr-only">{content.name} — </span>
           <Reveal variant="clip-reveal" as="span" className="block">
             The hidden gem
           </Reveal>
@@ -87,7 +87,7 @@ export function Hero() {
           className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
         >
           <a
-            href={BRAND.reservationUrl}
+            href={content.reservationUrl}
             className="rounded-full px-7 py-3.5 text-center font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright"
             style={{ background: "var(--color-amber)" }}
           >

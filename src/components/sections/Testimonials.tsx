@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { ReviewBadges } from "@/components/ReviewBadges";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type SiteContent } from "@/lib/brand";
 
 const AUTO_MS = 7000;
 
@@ -16,9 +16,9 @@ const AUTO_MS = 7000;
  * manual keyboard stepper under reduced motion. Closes on a link to read all
  * reviews on Tripadvisor. An aria-live region announces each quote change.
  */
-export function Testimonials() {
+export function Testimonials({ content = BRAND }: { content?: SiteContent }) {
   const reducedMotion = useReducedMotion();
-  const items = BRAND.reviews;
+  const items = content.reviews;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -60,9 +60,9 @@ export function Testimonials() {
             ))}
           </div>
           <p className="text-balance text-sm uppercase tracking-[0.2em] text-ink-dim">
-            <span className="text-ink">{BRAND.rating.toFixed(1)} stars</span> ·{" "}
-            {BRAND.reviewCount} reviews · {BRAND.award} ·{" "}
-            <span className="text-amber-deep">{BRAND.ranking}</span>
+            <span className="text-ink">{content.rating.toFixed(1)} stars</span> ·{" "}
+            {content.reviewCount} reviews · {content.award} ·{" "}
+            <span className="text-amber-deep">{content.ranking}</span>
           </p>
         </div>
 
@@ -143,27 +143,27 @@ export function Testimonials() {
         {/* A voice from Google, alongside the Tripadvisor excerpts above. */}
         <figure className="mx-auto mt-16 max-w-2xl border-t pt-12" style={{ borderColor: "var(--color-line)" }}>
           <blockquote className="font-display text-balance italic" style={{ fontSize: "var(--text-xl)", lineHeight: 1.3 }}>
-            “{BRAND.googleReview.quote}”
+            “{content.googleReview.quote}”
           </blockquote>
           <figcaption className="mt-6 text-sm uppercase tracking-[0.2em] text-ink-dim">
-            {BRAND.googleReview.author}
-            <span className="text-amber-deep">{` · via ${BRAND.googleReview.source}`}</span>
+            {content.googleReview.author}
+            <span className="text-amber-deep">{` · via ${content.googleReview.source}`}</span>
           </figcaption>
         </figure>
 
         {/* Read more — Tripadvisor (wired) and Google (placeholder → Maps search). */}
         <div className="mt-12 grid gap-4 sm:grid-cols-2">
           <a
-            href={BRAND.tripadvisorUrl}
+            href={content.tripadvisorUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
             style={{ borderColor: "var(--color-line)" }}
           >
-            Read all {BRAND.reviewCount} reviews on Tripadvisor
+            Read all {content.reviewCount} reviews on Tripadvisor
           </a>
           <a
-            href={BRAND.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? BRAND.googleMapsSearch : BRAND.googleReviewsUrl}
+            href={content.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? content.googleMapsSearch : content.googleReviewsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
@@ -174,7 +174,7 @@ export function Testimonials() {
         </div>
 
         {/* Platform trust badges with their star ratings, below the buttons. */}
-        <ReviewBadges />
+        <ReviewBadges content={content} />
       </div>
     </section>
   );

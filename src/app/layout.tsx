@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { fraunces, inter } from "@/lib/fonts";
 import { BRAND } from "@/lib/brand";
-import { Providers } from "@/components/Providers";
-import { RestaurantSchema } from "@/components/RestaurantSchema";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const DESCRIPTION =
@@ -62,26 +58,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Root layout is intentionally minimal: it owns only <html>/<body> and global
+// metadata so that BOTH the marketing site (the (site) route group, which adds
+// smooth-scroll, cursor, grain, analytics) and the Sanity Studio at /studio
+// (which must NOT inherit any of that chrome) can render cleanly beneath it.
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
-      <head>
-        <RestaurantSchema />
-      </head>
-      <body>
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-ivory focus:px-4 focus:py-2 focus:text-ink"
-        >
-          Skip to content
-        </a>
-        <Providers>{children}</Providers>
-        <div className="grain" aria-hidden />
-        <Analytics />
-        <SpeedInsights />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

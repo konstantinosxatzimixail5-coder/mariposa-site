@@ -1,0 +1,11 @@
+import type { SchemaTypeDefinition } from "sanity";
+import { siteSettings } from "./siteSettings";
+import { dish } from "./dish";
+import { testimonial } from "./testimonial";
+import { familyMember } from "./familyMember";
+import { occasion } from "./occasion";
+import { service } from "./service";
+
+export const schema: { types: SchemaTypeDefinition[] } = {
+  types: [siteSettings, dish, testimonial, familyMember, occasion, service],
+};

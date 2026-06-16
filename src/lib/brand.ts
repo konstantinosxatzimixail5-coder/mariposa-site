@@ -290,3 +290,21 @@ export type Dish = (typeof BRAND.dishes)[number];
 export type Review = (typeof BRAND.reviews)[number];
 export type FamilyMember = (typeof BRAND.family)[number];
 export type Occasion = (typeof BRAND.occasions)[number];
+
+// Widen BRAND's deeply-literal `as const` type to plain string/number/etc. so a
+// Sanity-sourced object is assignable to it, while keeping arrays readonly so
+// BRAND itself stays a valid value of this type. `SiteContent` is the shape
+// every section consumes (defaulting to BRAND); getContent() returns it.
+type DeepWiden<T> = T extends string
+  ? string
+  : T extends number
+    ? number
+    : T extends boolean
+      ? boolean
+      : T extends readonly (infer U)[]
+        ? readonly DeepWiden<U>[]
+        : T extends object
+          ? { readonly [K in keyof T]: DeepWiden<T[K]> }
+          : T;
+
+export type SiteContent = DeepWiden<typeof BRAND>;

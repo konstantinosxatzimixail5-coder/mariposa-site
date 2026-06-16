@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type SiteContent } from "@/lib/brand";
 import { ButterflyMark } from "./ButterflyMark";
 import { MobileNav } from "./MobileNav";
 import { useLenis } from "./SmoothScroll";
@@ -30,7 +30,7 @@ export const NAV_LINKS = [
 
 const NAV_OFFSET = -88; // clears the fixed bar when scrolling to a section
 
-export function SiteNav() {
+export function SiteNav({ content = BRAND }: { content?: SiteContent }) {
   const lenis = useLenis();
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
@@ -100,10 +100,10 @@ export function SiteNav() {
           href="#top"
           onClick={(e) => handleClick(e, "#top")}
           className="flex shrink-0 items-center gap-2.5 text-ivory transition-colors duration-200 hover:text-[color:var(--color-amber-bright)]"
-          aria-label={`${BRAND.name}, home`}
+          aria-label={`${content.name}, home`}
         >
           <ButterflyMark className="h-6 w-6 text-[color:var(--color-amber)]" />
-          <span className="font-display text-lg tracking-tight">{BRAND.name}</span>
+          <span className="font-display text-lg tracking-tight">{content.name}</span>
         </a>
 
         {/* Inline section links — desktop only. Below the lg breakpoint they

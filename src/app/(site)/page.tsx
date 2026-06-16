@@ -10,24 +10,30 @@ import { Reservation } from "@/components/sections/Reservation";
 import { TheFamily } from "@/components/sections/TheFamily";
 import { FAQ } from "@/components/sections/FAQ";
 import { Footer } from "@/components/sections/Footer";
+import { getContent } from "@/lib/content";
 
-export default function Home() {
+// Refresh content from Sanity at most once a minute (ISR).
+export const revalidate = 60;
+
+export default async function Home() {
+  const content = await getContent();
+
   return (
     <>
-      <SiteNav />
+      <SiteNav content={content} />
       <main id="main">
-        <Hero />
-        <Dishes />
+        <Hero content={content} />
+        <Dishes content={content} />
         <Garden />
         <ChefsWords />
-        <Hours />
-        <Celebrations />
-        <Testimonials />
-        <Reservation />
-        <TheFamily />
+        <Hours content={content} />
+        <Celebrations content={content} />
+        <Testimonials content={content} />
+        <Reservation content={content} />
+        <TheFamily content={content} />
         <FAQ />
       </main>
-      <Footer />
+      <Footer content={content} />
     </>
   );
 }

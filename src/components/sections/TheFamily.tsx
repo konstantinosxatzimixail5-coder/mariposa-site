@@ -1,6 +1,8 @@
 import { Reveal } from "@/components/Reveal";
 import { IconButterfly } from "@/components/SectionIcon";
-import { BRAND, type FamilyMember } from "@/lib/brand";
+import { BRAND, type SiteContent } from "@/lib/brand";
+
+type FamilyMember = SiteContent["family"][number];
 
 /**
  * The Family. The brand's true center: whoever walks in is received as a guest
@@ -8,12 +10,12 @@ import { BRAND, type FamilyMember } from "@/lib/brand";
  * mobile — each with name and role beneath. A short paragraph names why a family
  * keeps a standard the way only a family can, and the section closes on the
  * house principle as a large pull-quote. Portraits render as designed monogram
- * placeholders until the client supplies photography (BRAND.family[].image is
+ * placeholders until the client supplies photography (content.family[].image is
  * wired for the swap).
  *
  * This is the last section and the brand's heart.
  */
-export function TheFamily() {
+export function TheFamily({ content = BRAND }: { content?: SiteContent }) {
   return (
     <section
       id="family"
@@ -42,7 +44,7 @@ export function TheFamily() {
         </header>
 
         <ol className="mt-16 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 md:mt-20 md:grid-cols-5 md:gap-8">
-          {BRAND.family.map((member, i) => (
+          {content.family.map((member, i) => (
             <FamilyPortrait key={member.name} member={member} index={i} />
           ))}
         </ol>

@@ -7,7 +7,9 @@ import { Reveal } from "@/components/Reveal";
 import { TiltCard } from "@/components/TiltCard";
 import { DishDetail } from "@/components/DishDetail";
 import { IconCloche } from "@/components/SectionIcon";
-import { BRAND, type Dish } from "@/lib/brand";
+import { BRAND, type SiteContent } from "@/lib/brand";
+
+type ContentDish = SiteContent["dishes"][number];
 
 /**
  * Menu · Signature Plates. The menu changes with the garden and the day, so the
@@ -16,8 +18,8 @@ import { BRAND, type Dish } from "@/lib/brand";
  * slots, the real Tripadvisor pull-quote and a brand-voice description. A closing
  * box carries guests to the full, daily-changing menu.
  */
-export function Dishes() {
-  const [active, setActive] = useState<Dish | null>(null);
+export function Dishes({ content = BRAND }: { content?: SiteContent }) {
+  const [active, setActive] = useState<ContentDish | null>(null);
 
   return (
     <section
@@ -46,7 +48,7 @@ export function Dishes() {
         </div>
 
         <ul className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-5">
-          {BRAND.dishes.map((dish, i) => (
+          {content.dishes.map((dish, i) => (
             <Reveal key={dish.slug} variant="reveal" delay={i * 70} as="li">
               <button
                 type="button"
@@ -89,7 +91,7 @@ export function Dishes() {
         {/* Discover the full, daily-changing menu */}
         <Reveal as="div" delay={120} className="mt-16 md:mt-20">
           <a
-            href={BRAND.menuUrl}
+            href={content.menuUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex flex-col items-start justify-between gap-5 rounded-lg border p-8 transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--color-amber)_8%,var(--color-surface))] md:flex-row md:items-center md:p-10"

@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X } from "lucide-react";
-import type { Dish } from "@/lib/brand";
+import type { SiteContent } from "@/lib/brand";
+
+type Dish = SiteContent["dishes"][number];
 
 /**
  * Dish detail view — a focused modal for a single signature plate. Opens from a
