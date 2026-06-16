@@ -25,10 +25,12 @@ is entered, then switches over automatically. The page uses ISR
 (`revalidate = 60`), so published edits appear within a minute without a
 redeploy.
 
-> Scalar brand facts (address, phone, ratings, gallery) still come from
-> `src/lib/brand.ts` because they also feed the SEO metadata and Restaurant
-> JSON-LD. The `siteSettings` singleton is modelled and seeded, ready to wire
-> those through next if desired.
+The `siteSettings` singleton (name, tagline, contact, address, geo, hours,
+ratings/award, social, menu/hero URLs) is also wired through `getSettings()`
+into the Hero, Footer, Reservation, Testimonials, SiteNav, the page metadata
+(`generateMetadata`) and the Restaurant JSON-LD — all with the same
+fall-back-to-`BRAND` behaviour. Only the static art-direction gallery
+(`BRAND.gallery`, used by Garden/Celebrations) is intentionally left in code.
 
 ## First-time setup
 

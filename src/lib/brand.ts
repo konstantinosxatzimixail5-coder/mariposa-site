@@ -290,3 +290,7 @@ export type Dish = (typeof BRAND.dishes)[number];
 export type Review = (typeof BRAND.reviews)[number];
 export type FamilyMember = (typeof BRAND.family)[number];
 export type Occasion = (typeof BRAND.occasions)[number];
+// The full brand/settings shape. The Sanity `siteSettings` singleton mirrors the
+// scalar fields here; `getSettings()` returns this shape (Sanity values merged
+// over these defaults).
+export type Brand = typeof BRAND;

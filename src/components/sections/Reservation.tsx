@@ -2,14 +2,19 @@ import { Phone, MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { ReservationForm } from "@/components/ReservationForm";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Brand, type Occasion } from "@/lib/brand";
+
+type ReservationProps = { settings?: Brand; occasions?: Occasion[] };
 
 /**
  * Reservation. The conversion moment — a real booking form wired to
  * /api/reservations, with phone and WhatsApp kept as the always-live direct
  * path beneath it.
  */
-export function Reservation() {
+export function Reservation({
+  settings = BRAND,
+  occasions = [...BRAND.occasions],
+}: ReservationProps) {
   return (
     <section
       id="reserve"
@@ -38,19 +43,19 @@ export function Reservation() {
         </Reveal>
 
         <Reveal as="div" delay={260} className="mt-10 w-full">
-          <ReservationForm />
+          <ReservationForm occasions={occasions} />
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
             <span className="text-muted">Or reach us directly</span>
             <a
-              href={BRAND.phoneHref}
+              href={settings.phoneHref}
               className="inline-flex items-center gap-2 text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
             >
               <Phone className="h-4 w-4" aria-hidden />
-              {BRAND.phone}
+              {settings.phone}
             </a>
             <a
-              href={BRAND.whatsapp}
+              href={settings.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"

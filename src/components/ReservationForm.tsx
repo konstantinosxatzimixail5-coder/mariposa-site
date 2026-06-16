@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Occasion } from "@/lib/brand";
 
 /**
  * Reservation request form — wired to /api/reservations.
@@ -32,7 +32,11 @@ type Status = "idle" | "submitting" | "success" | "error";
 const FIELD_CLASS =
   "w-full rounded-md border bg-[var(--color-surface)] px-4 py-3 text-ink transition-colors duration-200 placeholder:text-muted focus:border-[color:var(--color-amber-deep)]";
 
-export function ReservationForm() {
+export function ReservationForm({
+  occasions = [...BRAND.occasions],
+}: {
+  occasions?: Occasion[];
+}) {
   const slots = useMemo(buildSlots, []);
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
@@ -253,7 +257,7 @@ export function ReservationForm() {
             style={{ borderColor: "var(--color-line)" }}
           >
             <option value="none">An evening out</option>
-            {BRAND.occasions.map((o) => (
+            {occasions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.title}
               </option>

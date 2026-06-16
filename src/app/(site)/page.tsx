@@ -11,6 +11,7 @@ import { TheFamily } from "@/components/sections/TheFamily";
 import { FAQ } from "@/components/sections/FAQ";
 import { Footer } from "@/components/sections/Footer";
 import {
+  getSettings,
   getDishes,
   getReviews,
   getServices,
@@ -25,31 +26,33 @@ import {
 export const revalidate = 60;
 
 export default async function Home() {
-  const [dishes, reviews, services, occasions, family, faqs] = await Promise.all([
-    getDishes(),
-    getReviews(),
-    getServices(),
-    getOccasions(),
-    getFamily(),
-    getFaqs(),
-  ]);
+  const [settings, dishes, reviews, services, occasions, family, faqs] =
+    await Promise.all([
+      getSettings(),
+      getDishes(),
+      getReviews(),
+      getServices(),
+      getOccasions(),
+      getFamily(),
+      getFaqs(),
+    ]);
 
   return (
     <>
-      <SiteNav />
+      <SiteNav settings={settings} />
       <main id="main">
-        <Hero />
+        <Hero settings={settings} />
         <Dishes dishes={dishes} />
         <Garden />
         <ChefsWords />
         <Hours services={services} />
         <Celebrations occasions={occasions} />
-        <Testimonials reviews={reviews} />
-        <Reservation />
+        <Testimonials settings={settings} reviews={reviews} />
+        <Reservation settings={settings} occasions={occasions} />
         <TheFamily family={family} />
         <FAQ faqs={faqs} />
       </main>
-      <Footer services={services} />
+      <Footer settings={settings} services={services} />
     </>
   );
 }

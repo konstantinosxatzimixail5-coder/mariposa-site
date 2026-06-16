@@ -1,6 +1,6 @@
 import "server-only";
 
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Brand } from "@/lib/brand";
 import { FAQS } from "@/lib/faq";
 import { client } from "@/sanity/lib/client";
 import {
@@ -42,10 +42,11 @@ function withImage<T extends WithImageUrl>(item: T): T {
   return item;
 }
 
-export async function getSettings() {
-  const remote = await fetchOr<Partial<typeof BRAND> | null>(settingsQuery, null);
+export async function getSettings(): Promise<Brand> {
+  const remote = await fetchOr<Partial<Brand> | null>(settingsQuery, null);
   // Merge over the static brand so any field left blank in the CMS keeps its
-  // canonical value rather than going undefined.
+  // canonical value rather than going undefined. (List content — dishes,
+  // reviews, etc. — stays from BRAND here; those have their own getters.)
   return { ...BRAND, ...(remote ?? {}) };
 }
 

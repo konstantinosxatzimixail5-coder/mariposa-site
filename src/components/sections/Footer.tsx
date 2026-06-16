@@ -1,13 +1,15 @@
 import { Instagram, Facebook, MessageCircle, MapPin, Phone } from "lucide-react";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { ContactForm } from "@/components/ContactForm";
-import { BRAND, type Service } from "@/lib/brand";
+import { BRAND, type Brand, type Service } from "@/lib/brand";
 
-// Key-free OpenStreetMap embed around the venue (refine pin — notes/assets.md #6).
-const { lat, lng } = BRAND.geo;
-const MAP_SRC = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.02}%2C${lat - 0.012}%2C${lng + 0.02}%2C${lat + 0.012}&layer=mapnik&marker=${lat}%2C${lng}`;
+type FooterProps = { settings?: Brand; services?: Service[] };
 
-export function Footer({ services = [...BRAND.services] }: { services?: Service[] }) {
+export function Footer({ settings = BRAND, services = [...BRAND.services] }: FooterProps) {
+  // Key-free OpenStreetMap embed around the venue (refine pin — notes/assets.md #6).
+  const { lat, lng } = settings.geo;
+  const MAP_SRC = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.02}%2C${lat - 0.012}%2C${lng + 0.02}%2C${lat + 0.012}&layer=mapnik&marker=${lat}%2C${lng}`;
+
   return (
     <footer
       id="location"
@@ -20,20 +22,20 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
           <div className="flex items-center gap-3">
             <ButterflyMark className="h-9 w-9 text-[color:var(--color-amber-deep)]" />
             <span className="font-display" style={{ fontSize: "var(--text-xl)" }}>
-              {BRAND.legalName}
+              {settings.legalName}
             </span>
           </div>
           <address className="mt-6 not-italic text-ink-dim">
             <span className="flex items-start gap-2">
               <MapPin className="mt-1 h-4 w-4 shrink-0 text-[color:var(--color-amber-deep)]" aria-hidden />
-              {BRAND.address.full}
+              {settings.address.full}
             </span>
             <a
-              href={BRAND.phoneHref}
+              href={settings.phoneHref}
               className="mt-3 inline-flex items-center gap-2 transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
             >
               <Phone className="h-4 w-4 text-[color:var(--color-amber-deep)]" aria-hidden />
-              {BRAND.phone}
+              {settings.phone}
             </a>
           </address>
 
@@ -51,8 +53,8 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
           <ul className="mt-8 flex items-center gap-4">
             <li>
               <a
-                href={BRAND.phoneHref}
-                aria-label={`Call ${BRAND.phone}`}
+                href={settings.phoneHref}
+                aria-label={`Call ${settings.phone}`}
                 className="inline-flex rounded-full border p-2.5 text-ink-dim transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
                 style={{ borderColor: "var(--color-line)" }}
               >
@@ -61,10 +63,10 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
             </li>
             <li>
               <a
-                href={BRAND.social.instagram}
+                href={settings.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Instagram ${BRAND.social.instagramHandle}`}
+                aria-label={`Instagram ${settings.social.instagramHandle}`}
                 className="inline-flex rounded-full border p-2.5 text-ink-dim transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
                 style={{ borderColor: "var(--color-line)" }}
               >
@@ -73,7 +75,7 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
             </li>
             <li>
               <a
-                href={BRAND.social.facebook}
+                href={settings.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -85,7 +87,7 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
             </li>
             <li>
               <a
-                href={BRAND.whatsapp}
+                href={settings.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -102,10 +104,10 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
         <div className="md:col-span-4">
           <h2 className="text-xs uppercase tracking-[0.3em] text-amber-deep">Write to Us</h2>
           <a
-            href={BRAND.emailHref}
+            href={settings.emailHref}
             className="mb-5 mt-3 inline-block text-sm text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
           >
-            {BRAND.email}
+            {settings.email}
           </a>
           <ContactForm />
         </div>
@@ -116,7 +118,7 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
           <div className="overflow-hidden rounded-sm border" style={{ borderColor: "var(--color-line)" }}>
             <iframe
               src={MAP_SRC}
-              title={`Map showing ${BRAND.name} in ${BRAND.address.locality}, ${BRAND.address.region}`}
+              title={`Map showing ${settings.name} in ${settings.address.locality}, ${settings.address.region}`}
               loading="lazy"
               className="aspect-[4/3] w-full grayscale-[0.3]"
               style={{ border: 0 }}
@@ -131,7 +133,7 @@ export function Footer({ services = [...BRAND.services] }: { services?: Service[
       >
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-6 text-xs text-muted md:flex-row md:px-10">
           <p>
-            © {new Date().getFullYear()} {BRAND.legalName}. {BRAND.meaning}.
+            © {new Date().getFullYear()} {settings.legalName}. {settings.meaning}.
           </p>
           <p className="uppercase tracking-[0.2em]">Theologos · Rhodes · Greece</p>
         </div>

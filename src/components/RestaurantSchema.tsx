@@ -1,4 +1,4 @@
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Brand } from "@/lib/brand";
 
 /**
  * The site's full schema.org graph, built entirely from the single BRAND source
@@ -41,33 +41,33 @@ const ALL_DAYS = [
 const DESCRIPTION =
   "Family-run Mediterranean cooking in a garden above the Aegean. Vegetables raised in our own beds, served beneath the vines of Theologos, Rhodes.";
 
-export function RestaurantSchema() {
+export function RestaurantSchema({ settings = BRAND }: { settings?: Brand }) {
   const address = {
     "@type": "PostalAddress",
-    streetAddress: BRAND.address.street,
-    addressLocality: BRAND.address.locality,
-    addressRegion: BRAND.address.region,
-    postalCode: BRAND.address.postalCode,
+    streetAddress: settings.address.street,
+    addressLocality: settings.address.locality,
+    addressRegion: settings.address.region,
+    postalCode: settings.address.postalCode,
     addressCountry: "GR",
   };
 
   const founder = { "@type": "Person", name: "Despoina", jobTitle: "Founder & Chef" };
-  const employees = BRAND.family.map((m) => ({
+  const employees = settings.family.map((m) => ({
     "@type": "Person",
     name: m.name,
     jobTitle: m.role,
   }));
 
-  const sameAs = [BRAND.social.instagram, BRAND.social.facebook, BRAND.tripadvisorUrl];
+  const sameAs = [settings.social.instagram, settings.social.facebook, settings.tripadvisorUrl];
 
   const restaurant = {
     "@type": "Restaurant",
     "@id": RESTAURANT_ID,
-    name: BRAND.legalName,
+    name: settings.legalName,
     description: DESCRIPTION,
     url: SITE_URL,
-    telephone: BRAND.phone,
-    email: BRAND.email,
+    telephone: settings.phone,
+    email: settings.email,
     servesCuisine: ["Mediterranean", "Greek", "Italian"],
     priceRange: "$$",
     image: `${SITE_URL}/og.jpg`,
@@ -75,32 +75,32 @@ export function RestaurantSchema() {
     address,
     geo: {
       "@type": "GeoCoordinates",
-      latitude: BRAND.geo.lat,
-      longitude: BRAND.geo.lng,
+      latitude: settings.geo.lat,
+      longitude: settings.geo.lng,
     },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ALL_DAYS,
-        opens: BRAND.hours.opens,
-        closes: BRAND.hours.closes,
+        opens: settings.hours.opens,
+        closes: settings.hours.closes,
       },
     ],
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: BRAND.rating,
-      reviewCount: BRAND.reviewCount,
+      ratingValue: settings.rating,
+      reviewCount: settings.reviewCount,
       bestRating: 5,
       worstRating: 1,
     },
     // A handful of real, attributed Tripadvisor excerpts for richer understanding.
-    review: BRAND.reviews.slice(0, 4).map((r) => ({
+    review: settings.reviews.slice(0, 4).map((r) => ({
       "@type": "Review",
       reviewBody: r.quote,
       author: { "@type": "Person", name: r.author },
       reviewRating: { "@type": "Rating", ratingValue: 5, bestRating: 5, worstRating: 1 },
     })),
-    award: BRAND.award,
+    award: settings.award,
     hasMenu: { "@id": `${SITE_URL}/#menu` },
     founder,
     employee: employees,
@@ -119,14 +119,14 @@ export function RestaurantSchema() {
   const organization = {
     "@type": "Organization",
     "@id": ORG_ID,
-    name: BRAND.legalName,
-    alternateName: BRAND.name,
+    name: settings.legalName,
+    alternateName: settings.name,
     url: SITE_URL,
     logo: `${SITE_URL}/favicon.svg`,
     image: `${SITE_URL}/og.jpg`,
     description: DESCRIPTION,
-    email: BRAND.email,
-    telephone: BRAND.phone,
+    email: settings.email,
+    telephone: settings.phone,
     address,
     founder,
     employee: employees,
@@ -137,7 +137,7 @@ export function RestaurantSchema() {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     url: SITE_URL,
-    name: BRAND.legalName,
+    name: settings.legalName,
     description: DESCRIPTION,
     inLanguage: "en",
     publisher: { "@id": ORG_ID },
@@ -156,7 +156,7 @@ export function RestaurantSchema() {
     "@id": `${SITE_URL}/#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Menu", item: BRAND.menuUrl },
+      { "@type": "ListItem", position: 2, name: "Menu", item: settings.menuUrl },
     ],
   };
 
@@ -166,11 +166,11 @@ export function RestaurantSchema() {
     name: "Signature plates",
     description:
       "The recurring favourites guests ask for by name, from a daily-changing Mediterranean menu.",
-    url: BRAND.menuUrl,
+    url: settings.menuUrl,
     hasMenuSection: {
       "@type": "MenuSection",
       name: "Guest favourites",
-      hasMenuItem: BRAND.dishes.map((d) => ({
+      hasMenuItem: settings.dishes.map((d) => ({
         "@type": "MenuItem",
         name: d.name,
         description: d.note,

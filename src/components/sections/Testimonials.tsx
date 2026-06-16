@@ -5,7 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { ReviewBadges } from "@/components/ReviewBadges";
-import { BRAND, type Review } from "@/lib/brand";
+import { BRAND, type Brand, type Review } from "@/lib/brand";
+
+type TestimonialsProps = { settings?: Brand; reviews?: Review[] };
 
 const AUTO_MS = 7000;
 
@@ -16,7 +18,7 @@ const AUTO_MS = 7000;
  * manual keyboard stepper under reduced motion. Closes on a link to read all
  * reviews on Tripadvisor. An aria-live region announces each quote change.
  */
-export function Testimonials({ reviews = [...BRAND.reviews] }: { reviews?: Review[] }) {
+export function Testimonials({ settings = BRAND, reviews = [...BRAND.reviews] }: TestimonialsProps) {
   const reducedMotion = useReducedMotion();
   const items = reviews;
   const [index, setIndex] = useState(0);
@@ -60,9 +62,9 @@ export function Testimonials({ reviews = [...BRAND.reviews] }: { reviews?: Revie
             ))}
           </div>
           <p className="text-balance text-sm uppercase tracking-[0.2em] text-ink-dim">
-            <span className="text-ink">{BRAND.rating.toFixed(1)} stars</span> ·{" "}
-            {BRAND.reviewCount} reviews · {BRAND.award} ·{" "}
-            <span className="text-amber-deep">{BRAND.ranking}</span>
+            <span className="text-ink">{settings.rating.toFixed(1)} stars</span> ·{" "}
+            {settings.reviewCount} reviews · {settings.award} ·{" "}
+            <span className="text-amber-deep">{settings.ranking}</span>
           </p>
         </div>
 
@@ -143,27 +145,27 @@ export function Testimonials({ reviews = [...BRAND.reviews] }: { reviews?: Revie
         {/* A voice from Google, alongside the Tripadvisor excerpts above. */}
         <figure className="mx-auto mt-16 max-w-2xl border-t pt-12" style={{ borderColor: "var(--color-line)" }}>
           <blockquote className="font-display text-balance italic" style={{ fontSize: "var(--text-xl)", lineHeight: 1.3 }}>
-            “{BRAND.googleReview.quote}”
+            “{settings.googleReview.quote}”
           </blockquote>
           <figcaption className="mt-6 text-sm uppercase tracking-[0.2em] text-ink-dim">
-            {BRAND.googleReview.author}
-            <span className="text-amber-deep">{` · via ${BRAND.googleReview.source}`}</span>
+            {settings.googleReview.author}
+            <span className="text-amber-deep">{` · via ${settings.googleReview.source}`}</span>
           </figcaption>
         </figure>
 
         {/* Read more — Tripadvisor (wired) and Google (placeholder → Maps search). */}
         <div className="mt-12 grid gap-4 sm:grid-cols-2">
           <a
-            href={BRAND.tripadvisorUrl}
+            href={settings.tripadvisorUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
             style={{ borderColor: "var(--color-line)" }}
           >
-            Read all {BRAND.reviewCount} reviews on Tripadvisor
+            Read all {settings.reviewCount} reviews on Tripadvisor
           </a>
           <a
-            href={BRAND.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? BRAND.googleMapsSearch : BRAND.googleReviewsUrl}
+            href={settings.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? settings.googleMapsSearch : settings.googleReviewsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
@@ -174,7 +176,7 @@ export function Testimonials({ reviews = [...BRAND.reviews] }: { reviews?: Revie
         </div>
 
         {/* Platform trust badges with their star ratings, below the buttons. */}
-        <ReviewBadges />
+        <ReviewBadges settings={settings} />
       </div>
     </section>
   );

@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { BRAND } from "@/lib/brand";
 
+type HeroVideoProps = { src?: string };
+
 /**
  * Plays the restaurant's own cinematic 4K hero footage as the furthest-back
  * hero layer (the Remotion-rendered loop is the documented fallback/alt asset).
@@ -16,7 +18,7 @@ import { BRAND } from "@/lib/brand";
  *
  * Muted + playsInline + loop so it autoplays everywhere without controls.
  */
-export function HeroVideo() {
+export function HeroVideo({ src = BRAND.heroVideo }: HeroVideoProps) {
   const reducedMotion = useReducedMotion();
   const ref = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
@@ -43,7 +45,7 @@ export function HeroVideo() {
         className="h-full w-full object-cover transition-opacity duration-700"
         style={{ opacity: ready ? 0.55 : 0 }}
       >
-        <source src={BRAND.heroVideo} type="video/mp4" />
+        <source src={src} type="video/mp4" />
       </video>
     </div>
   );

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Brand } from "@/lib/brand";
 
 /**
  * Review-platform trust badges — the Tripadvisor Travelers' Choice 2025 award
@@ -53,12 +53,12 @@ function GoogleWordmark() {
   );
 }
 
-export function ReviewBadges() {
+export function ReviewBadges({ settings = BRAND }: { settings?: Brand }) {
   return (
     <div className="mt-10 flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
       {/* Tripadvisor — Travelers' Choice 2025 award badge */}
       <a
-        href={BRAND.tripadvisorUrl}
+        href={settings.tripadvisorUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Tripadvisor Travelers' Choice 2025 award"
@@ -75,7 +75,7 @@ export function ReviewBadges() {
 
       {/* Google */}
       <a
-        href={BRAND.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? BRAND.googleMapsSearch : BRAND.googleReviewsUrl}
+        href={settings.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? settings.googleMapsSearch : settings.googleReviewsUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Google Reviews — 4.9 of 5 stars"
