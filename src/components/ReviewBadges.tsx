@@ -1,10 +1,11 @@
+import Image from "next/image";
 import { BRAND } from "@/lib/brand";
 
 /**
- * Review-platform trust badges — Tripadvisor and Google, each with its five-star
- * rating, shown beneath the "read all reviews" buttons. Everything is inline SVG
- * (the Google wordmark in its brand colours, the Tripadvisor owl, the stars) so
- * the marks stay razor-sharp on any display and need no raster assets. The row
+ * Review-platform trust badges — the Tripadvisor Travelers' Choice 2025 award
+ * and Google with its five-star rating, shown beneath the "read all reviews"
+ * buttons. The Google mark and stars are inline SVG; the Travelers' Choice badge
+ * is a self-hosted vector asset. All stay razor-sharp on any display. The row
  * centres and wraps to a stack on narrow screens.
  */
 
@@ -15,7 +16,6 @@ const GOOGLE = {
   green: "#34A853",
   star: "#FBBC05",
 };
-const TRIPADVISOR_GREEN = "#34E0A1";
 
 function Stars({ color, label }: { color: string; label: string }) {
   return (
@@ -53,48 +53,24 @@ function GoogleWordmark() {
   );
 }
 
-/** Tripadvisor's Travelers' Choice 2025 award lockup — the green rounded-square
- *  owl icon beside the award name. */
-function TravelersChoiceBadge() {
-  return (
-    <div className="flex items-center gap-3">
-      <svg viewBox="0 0 48 48" className="h-11 w-11 shrink-0" aria-hidden>
-        <rect x="1" y="1" width="46" height="46" rx="13" fill={TRIPADVISOR_GREEN} />
-        {/* ear tufts */}
-        <path d="M14 8l5 6-9 0z" fill="#000814" />
-        <path d="M34 8l-5 6 9 0z" fill="#000814" />
-        {/* twin eyes — white with dark pupils */}
-        {[18, 30].map((cx) => (
-          <g key={cx}>
-            <circle cx={cx} cy={25} r={8} fill="#fff" />
-            <circle cx={cx} cy={25} r={3.4} fill="#000814" />
-          </g>
-        ))}
-        {/* beak */}
-        <path d="M24 31l-3 4h6z" fill="#000814" />
-      </svg>
-      <span className="text-left leading-[1.05]">
-        <span className="block text-[1.15rem] font-bold tracking-tight text-ink">
-          Travelers&rsquo; Choice
-        </span>
-        <span className="block text-[1.05rem] text-ink-dim">2025</span>
-      </span>
-    </div>
-  );
-}
-
 export function ReviewBadges() {
   return (
     <div className="mt-10 flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
-      {/* Tripadvisor — Travelers' Choice 2025 award */}
+      {/* Tripadvisor — Travelers' Choice 2025 award badge */}
       <a
         href={BRAND.tripadvisorUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Tripadvisor Travelers' Choice ${2025} award`}
+        aria-label="Tripadvisor Travelers' Choice 2025 award"
         className="transition-opacity duration-200 hover:opacity-80"
       >
-        <TravelersChoiceBadge />
+        <Image
+          src="/images/logo/travelers-choice-2025.svg"
+          alt="Tripadvisor Travelers' Choice Awards 2025"
+          width={128}
+          height={128}
+          className="h-28 w-28"
+        />
       </a>
 
       {/* Google */}

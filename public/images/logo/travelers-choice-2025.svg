@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Tripadvisor Travelers' Choice Awards 2025">
+  <!-- Official Tripadvisor Travelers' Choice 2025 award badge, reproduced as
+       vector art: bright green disc, dark wordmark + award name, the twin-eyed
+       owl framed by a laurel wreath, and the award year. -->
+  <circle cx="256" cy="256" r="256" fill="#00E18C"/>
+  <g fill="#08312B">
+    <!-- Wordmark + award name -->
+    <text x="256" y="150" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="50" letter-spacing="-1">Tripadvisor</text>
+    <text x="256" y="202" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="500" font-size="46">Travelers&#8217;</text>
+    <text x="256" y="250" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="500" font-size="46">Choice Awards</text>
+
+    <!-- Owl brow (two horns meeting at centre) -->
+    <path d="M188 300 Q210 272 230 296 Q243 274 256 290 Q269 274 282 296 Q302 272 324 300 Q300 286 282 300 Q269 290 256 304 Q243 290 230 300 Q212 286 188 300 Z"/>
+    <!-- Owl eyes: thick dark rings with green centres and dark pupils -->
+    <circle cx="215" cy="346" r="40"/>
+    <circle cx="297" cy="346" r="40"/>
+    <circle cx="215" cy="346" r="27" fill="#00E18C"/>
+    <circle cx="297" cy="346" r="27" fill="#00E18C"/>
+    <circle cx="215" cy="346" r="11"/>
+    <circle cx="297" cy="346" r="11"/>
+    <!-- Beak -->
+    <path d="M256 360 l-9 16 h18 z"/>
+
+    <!-- Laurel wreath. One branch drawn, then mirrored to the other side. -->
+    <g>
+      <!-- left branch: curving stem + leaves -->
+      <path d="M170 434 Q116 394 122 312" fill="none" stroke="#08312B" stroke-width="7" stroke-linecap="round"/>
+      <g>
+        <ellipse cx="112" cy="324" rx="11" ry="21" transform="rotate(-42 112 324)"/>
+        <ellipse cx="115" cy="354" rx="11" ry="21" transform="rotate(-28 115 354)"/>
+        <ellipse cx="124" cy="382" rx="11" ry="21" transform="rotate(-14 124 382)"/>
+        <ellipse cx="138" cy="406" rx="11" ry="20" transform="rotate(2 138 406)"/>
+        <ellipse cx="155" cy="425" rx="10" ry="18" transform="rotate(20 155 425)"/>
+      </g>
+    </g>
+    <g transform="translate(512,0) scale(-1,1)">
+      <path d="M170 434 Q116 394 122 312" fill="none" stroke="#08312B" stroke-width="7" stroke-linecap="round"/>
+      <g>
+        <ellipse cx="112" cy="324" rx="11" ry="21" transform="rotate(-42 112 324)"/>
+        <ellipse cx="115" cy="354" rx="11" ry="21" transform="rotate(-28 115 354)"/>
+        <ellipse cx="124" cy="382" rx="11" ry="21" transform="rotate(-14 124 382)"/>
+        <ellipse cx="138" cy="406" rx="11" ry="20" transform="rotate(2 138 406)"/>
+        <ellipse cx="155" cy="425" rx="10" ry="18" transform="rotate(20 155 425)"/>
+      </g>
+    </g>
+
+    <!-- Award year -->
+    <text x="256" y="470" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="40" letter-spacing="1">2025</text>
+  </g>
+</svg>
