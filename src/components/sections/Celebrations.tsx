@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Parallax } from "@/components/Parallax";
 import { IconFlute } from "@/components/SectionIcon";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Occasion } from "@/lib/brand";
 
 /**
  * Celebrations & Private Events. Mariposa as the setting for the marked days:
@@ -21,7 +21,7 @@ function planEvening(occasion: string) {
   window.dispatchEvent(new CustomEvent("mariposa:occasion", { detail: occasion }));
 }
 
-export function Celebrations() {
+export function Celebrations({ occasions = [...BRAND.occasions] }: { occasions?: Occasion[] }) {
   return (
     <section
       id="celebrations"
@@ -68,7 +68,7 @@ export function Celebrations() {
 
       <div className="mx-auto max-w-7xl px-6 pb-[var(--space-section)] pt-16 md:px-10 md:pt-20">
         <div className="grid gap-px overflow-hidden rounded-sm border md:grid-cols-2" style={{ borderColor: "var(--color-line)", background: "var(--color-line)" }}>
-          {BRAND.occasions.map((occasion) => (
+          {occasions.map((occasion) => (
             <button
               key={occasion.value}
               type="button"

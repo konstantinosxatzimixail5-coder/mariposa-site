@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { ReviewBadges } from "@/components/ReviewBadges";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Review } from "@/lib/brand";
 
 const AUTO_MS = 7000;
 
@@ -16,9 +16,9 @@ const AUTO_MS = 7000;
  * manual keyboard stepper under reduced motion. Closes on a link to read all
  * reviews on Tripadvisor. An aria-live region announces each quote change.
  */
-export function Testimonials() {
+export function Testimonials({ reviews = [...BRAND.reviews] }: { reviews?: Review[] }) {
   const reducedMotion = useReducedMotion();
-  const items = BRAND.reviews;
+  const items = reviews;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 

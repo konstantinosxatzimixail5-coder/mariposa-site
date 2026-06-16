@@ -1,13 +1,13 @@
 import { Instagram, Facebook, MessageCircle, MapPin, Phone } from "lucide-react";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { ContactForm } from "@/components/ContactForm";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Service } from "@/lib/brand";
 
 // Key-free OpenStreetMap embed around the venue (refine pin — notes/assets.md #6).
 const { lat, lng } = BRAND.geo;
 const MAP_SRC = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.02}%2C${lat - 0.012}%2C${lng + 0.02}%2C${lat + 0.012}&layer=mapnik&marker=${lat}%2C${lng}`;
 
-export function Footer() {
+export function Footer({ services = [...BRAND.services] }: { services?: Service[] }) {
   return (
     <footer
       id="location"
@@ -40,7 +40,7 @@ export function Footer() {
           {/* Hours — the three real services */}
           <h2 className="mt-8 text-xs uppercase tracking-[0.3em] text-amber-deep">Hours</h2>
           <dl className="mt-4 space-y-2.5 text-sm">
-            {BRAND.services.map((service) => (
+            {services.map((service) => (
               <div key={service.label} className="flex justify-between gap-4">
                 <dt className="text-ink">{service.label}</dt>
                 <dd className="tabular-nums text-ink-dim">{service.time}</dd>

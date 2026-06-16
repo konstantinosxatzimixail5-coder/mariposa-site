@@ -16,7 +16,7 @@ import { BRAND, type Dish } from "@/lib/brand";
  * slots, the real Tripadvisor pull-quote and a brand-voice description. A closing
  * box carries guests to the full, daily-changing menu.
  */
-export function Dishes() {
+export function Dishes({ dishes = [...BRAND.dishes] }: { dishes?: Dish[] }) {
   const [active, setActive] = useState<Dish | null>(null);
 
   return (
@@ -46,7 +46,7 @@ export function Dishes() {
         </div>
 
         <ul className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-5">
-          {BRAND.dishes.map((dish, i) => (
+          {dishes.map((dish, i) => (
             <Reveal key={dish.slug} variant="reveal" delay={i * 70} as="li">
               <button
                 type="button"

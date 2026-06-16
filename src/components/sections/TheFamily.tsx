@@ -13,7 +13,7 @@ import { BRAND, type FamilyMember } from "@/lib/brand";
  *
  * This is the last section and the brand's heart.
  */
-export function TheFamily() {
+export function TheFamily({ family = [...BRAND.family] }: { family?: FamilyMember[] }) {
   return (
     <section
       id="family"
@@ -42,7 +42,7 @@ export function TheFamily() {
         </header>
 
         <ol className="mt-16 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 md:mt-20 md:grid-cols-5 md:gap-8">
-          {BRAND.family.map((member, i) => (
+          {family.map((member, i) => (
             <FamilyPortrait key={member.name} member={member} index={i} />
           ))}
         </ol>

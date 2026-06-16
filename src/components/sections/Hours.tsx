@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { IconClock } from "@/components/SectionIcon";
-import { BRAND } from "@/lib/brand";
+import { BRAND, type Service } from "@/lib/brand";
 
 /**
  * The Experience. The day at Mariposa told in its three services — breakfast as
@@ -10,7 +10,7 @@ import { BRAND } from "@/lib/brand";
  * set in hung serif numerals, and a single evocative line. No "open daily until
  * midnight"; the real rhythm, stated plainly and unhurried.
  */
-export function Hours() {
+export function Hours({ services = [...BRAND.services] }: { services?: Service[] }) {
   return (
     <section
       id="experience"
@@ -39,7 +39,7 @@ export function Hours() {
         </div>
 
         <ol className="mt-20 grid gap-14 md:mt-24 md:grid-cols-3 md:gap-10">
-          {BRAND.services.map((service, i) => (
+          {services.map((service, i) => (
             <Reveal
               key={service.label}
               variant="reveal"

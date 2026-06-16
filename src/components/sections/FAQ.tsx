@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Reveal } from "@/components/Reveal";
 import { IconQuestion } from "@/components/SectionIcon";
 import { useReducedMotion } from "@/lib/useReducedMotion";
-import { FAQS } from "@/lib/faq";
+import { FAQS, type Faq } from "@/lib/faq";
 
 /**
  * FAQ. Ten answer-first questions in an accessible disclosure accordion, with a
@@ -19,14 +19,14 @@ import { FAQS } from "@/lib/faq";
  *    CSS grid-rows height transition), so the full text is present in the served
  *    HTML for crawlers, not injected on click.
  */
-export function FAQ() {
+export function FAQ({ faqs = [...FAQS] }: { faqs?: Faq[] }) {
   const reducedMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQS.map((item) => ({
+    mainEntity: faqs.map((item) => ({
       "@type": "Question",
       name: item.q,
       acceptedAnswer: { "@type": "Answer", text: item.a },
@@ -68,7 +68,7 @@ export function FAQ() {
           className="mt-14 border-t"
           style={{ borderColor: "var(--color-line)" }}
         >
-          {FAQS.map((item, i) => {
+          {faqs.map((item, i) => {
             const open = openIndex === i;
             const qId = `faq-q-${i}`;
             const panelId = `faq-panel-${i}`;
