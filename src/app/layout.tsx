@@ -3,6 +3,7 @@ import { fraunces, inter } from "@/lib/fonts";
 import { BRAND } from "@/lib/brand";
 import { Providers } from "@/components/Providers";
 import { RestaurantSchema } from "@/components/RestaurantSchema";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const DESCRIPTION =
@@ -77,6 +78,7 @@ export default function RootLayout({
         </a>
         <Providers>{children}</Providers>
         <div className="grain" aria-hidden />
+        <SpeedInsights />
       </body>
     </html>
   );
