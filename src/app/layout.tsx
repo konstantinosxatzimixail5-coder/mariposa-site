@@ -6,8 +6,8 @@ import "./globals.css";
 
 /**
  * Root layout — intentionally minimal. The public site's chrome (motion,
- * JSON-LD, marketing metadata) lives in the `(site)` route group so the
- * embedded Sanity Studio at `/studio` renders without it.
+ * JSON-LD, marketing metadata) lives in the `(site)` route group, keeping this
+ * shell free for any non-site routes.
  */
 export const metadata: Metadata = {
   metadataBase: new URL("https://mariposa.restaurant"),

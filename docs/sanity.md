@@ -1,20 +1,17 @@
 # Sanity CMS
 
 Mariposa's editable content lives in Sanity (project `te38hur6`, dataset
-`production`). The Studio is **embedded** in this Next.js app — no separate
-deploy.
+`production`). The Studio is a **standalone project** in `studio-mariposa-website/`;
+the Next.js site reads the same dataset via `next-sanity`.
 
 ## Layout
 
 | Path | What |
 | --- | --- |
-| `sanity.config.ts` / `sanity.cli.ts` | Studio + CLI config |
+| `studio-mariposa-website/` | Standalone Sanity Studio (config, schemas, desk). Run/deploy from here. |
 | `src/sanity/env.ts` | Project id / dataset / API version (public; literals are build defaults) |
-| `src/sanity/schemaTypes/` | Schemas: `siteSettings` (singleton), `dish`, `review`, `familyMember`, `occasion`, `service`, `faq` |
-| `src/sanity/lib/` | `client`, `image` (urlFor), `queries` (GROQ) |
-| `src/sanity/structure.ts` | Studio desk (Site Settings as a singleton) |
-| `src/app/studio/[[...tool]]/` | Embedded Studio route → **`/studio`** |
-| `src/app/(site)/` | The public marketing site (route group, so the Studio skips its chrome) |
+| `src/sanity/lib/` | `client`, `image` (urlFor), `queries` (GROQ) — the site's read path |
+| `src/app/(site)/` | The public marketing site (route group) |
 | `src/lib/content.ts` | Fetchers that read Sanity and **fall back to `BRAND`/`FAQS`** |
 | `scripts/sanity-import.ts` | One-shot seeder (`pnpm sanity:import`) |
 
@@ -35,17 +32,23 @@ redeploy.
 
 ## First-time setup
 
-1. **Editing access** — open `/studio` (locally: `pnpm dev` → http://localhost:3000/studio)
-   and sign in with the Sanity account that owns project `te38hur6`.
-2. **Seed the dataset from the current site content** (one time):
+1. **Editing access** — run the Studio and sign in with the account that owns
+   project `te38hur6`:
+   ```bash
+   cd studio-mariposa-website
+   npm install
+   npx sanity login
+   npm run dev        # http://localhost:3333  (npm run deploy → <name>.sanity.studio)
+   ```
+2. **Seed the dataset from the current site content** (one time, from the repo root):
    - Create an **Editor** token: https://www.sanity.io/manage → project
      `te38hur6` → API → Tokens.
    - Add it to `.env.local`: `SANITY_API_WRITE_TOKEN=...`
    - Run `pnpm sanity:import` (add `--replace` to overwrite existing docs).
    - This creates every document and uploads the images referenced in `BRAND`.
 3. **CORS** — in the Sanity manage console add your site origins (e.g.
-   `http://localhost:3000` and the production URL) under API → CORS origins so
-   the Studio can talk to the dataset from the browser.
+   `http://localhost:3333`, `http://localhost:3000` and the production URL) under
+   API → CORS origins so the Studio can talk to the dataset from the browser.
 
 ## Env vars
 

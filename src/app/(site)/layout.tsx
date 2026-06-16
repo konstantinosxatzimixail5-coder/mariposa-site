@@ -53,7 +53,7 @@ export const metadata: Metadata = {
 /**
  * Marketing-site layout. Holds the motion chrome (smooth scroll, cursor,
  * preloader, 3D atmosphere) and the Restaurant JSON-LD — everything the public
- * pages share but the embedded `/studio` must not inherit.
+ * pages share, scoped to the `(site)` group rather than the root shell.
  */
 export default function SiteLayout({
   children,
