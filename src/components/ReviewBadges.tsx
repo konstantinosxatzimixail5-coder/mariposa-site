@@ -53,45 +53,48 @@ function GoogleWordmark() {
   );
 }
 
-/** Tripadvisor's twin-eyed owl mark. */
-function TripadvisorOwl() {
+/** Tripadvisor's Travelers' Choice 2025 award lockup — the green rounded-square
+ *  owl icon beside the award name. */
+function TravelersChoiceBadge() {
   return (
-    <svg viewBox="0 0 64 40" className="h-9 w-auto" aria-hidden>
-      {/* ear tufts */}
-      <path d="M14 6l5 5-9 0z" fill={TRIPADVISOR_GREEN} />
-      <path d="M50 6l-5 5 9 0z" fill={TRIPADVISOR_GREEN} />
-      {/* eyes */}
-      {[20, 44].map((cx) => (
-        <g key={cx}>
-          <circle cx={cx} cy={22} r={13} fill={TRIPADVISOR_GREEN} />
-          <circle cx={cx} cy={22} r={7.5} fill="#fff" />
-          <circle cx={cx} cy={22} r={3.6} fill="#000814" />
-        </g>
-      ))}
-      {/* beak */}
-      <path d="M32 30l-4 5h8z" fill={TRIPADVISOR_GREEN} />
-    </svg>
+    <div className="flex items-center gap-3">
+      <svg viewBox="0 0 48 48" className="h-11 w-11 shrink-0" aria-hidden>
+        <rect x="1" y="1" width="46" height="46" rx="13" fill={TRIPADVISOR_GREEN} />
+        {/* ear tufts */}
+        <path d="M14 8l5 6-9 0z" fill="#000814" />
+        <path d="M34 8l-5 6 9 0z" fill="#000814" />
+        {/* twin eyes — white with dark pupils */}
+        {[18, 30].map((cx) => (
+          <g key={cx}>
+            <circle cx={cx} cy={25} r={8} fill="#fff" />
+            <circle cx={cx} cy={25} r={3.4} fill="#000814" />
+          </g>
+        ))}
+        {/* beak */}
+        <path d="M24 31l-3 4h6z" fill="#000814" />
+      </svg>
+      <span className="text-left leading-[1.05]">
+        <span className="block text-[1.15rem] font-bold tracking-tight text-ink">
+          Travelers&rsquo; Choice
+        </span>
+        <span className="block text-[1.05rem] text-ink-dim">2025</span>
+      </span>
+    </div>
   );
 }
 
 export function ReviewBadges() {
   return (
-    <div className="mt-10 flex flex-wrap items-start justify-center gap-x-16 gap-y-10">
-      {/* Tripadvisor */}
+    <div className="mt-10 flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
+      {/* Tripadvisor — Travelers' Choice 2025 award */}
       <a
         href={BRAND.tripadvisorUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Tripadvisor — ${BRAND.rating.toFixed(1)} of 5 stars`}
-        className="flex flex-col items-center gap-3 transition-opacity duration-200 hover:opacity-80"
+        aria-label={`Tripadvisor Travelers' Choice ${2025} award`}
+        className="transition-opacity duration-200 hover:opacity-80"
       >
-        <div className="flex items-center gap-3">
-          <TripadvisorOwl />
-          <span className="text-[1.6rem] font-semibold leading-none tracking-tight text-ink">
-            Tripadvisor
-          </span>
-        </div>
-        <Stars color={TRIPADVISOR_GREEN} label={`${BRAND.rating.toFixed(1)} of 5 on Tripadvisor`} />
+        <TravelersChoiceBadge />
       </a>
 
       {/* Google */}
