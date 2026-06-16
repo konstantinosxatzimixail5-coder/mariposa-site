@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
+import { ReviewBadges } from "@/components/ReviewBadges";
 import { BRAND } from "@/lib/brand";
 
 const AUTO_MS = 7000;
@@ -171,6 +172,9 @@ export function Testimonials() {
             Read our reviews on Google
           </a>
         </div>
+
+        {/* Platform trust badges with their star ratings, below the buttons. */}
+        <ReviewBadges />
       </div>
     </section>
   );

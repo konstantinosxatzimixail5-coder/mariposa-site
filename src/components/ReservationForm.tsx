@@ -39,6 +39,7 @@ export function ReservationForm() {
   const baseId = useId();
   const ids = {
     name: `${baseId}-name`,
+    phone: `${baseId}-phone`,
     date: `${baseId}-date`,
     time: `${baseId}-time`,
     party: `${baseId}-party`,
@@ -73,6 +74,7 @@ export function ReservationForm() {
     const data = new FormData(form);
     const payload = {
       name: String(data.get("name") ?? "").trim(),
+      phone: String(data.get("phone") ?? "").trim(),
       date: String(data.get("date") ?? ""),
       time: String(data.get("time") ?? ""),
       party: Number(data.get("party") ?? 0),
@@ -158,6 +160,23 @@ export function ReservationForm() {
             aria-invalid={invalid.includes("name")}
             className={FIELD_CLASS}
             style={{ borderColor: invalid.includes("name") ? "var(--color-amber)" : "var(--color-line)" }}
+          />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor={ids.phone} className="mb-2 block text-sm text-ink">
+            Phone <span className="text-muted">(so we can confirm)</span>
+          </label>
+          <input
+            id={ids.phone}
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            inputMode="tel"
+            placeholder="+30 …"
+            aria-invalid={invalid.includes("phone")}
+            className={FIELD_CLASS}
+            style={{ borderColor: invalid.includes("phone") ? "var(--color-amber)" : "var(--color-line)" }}
           />
         </div>
 

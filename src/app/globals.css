@@ -50,8 +50,8 @@
   --text-xl: clamp(1.3rem, 1.15rem + 0.7vw, 1.85rem);
   --text-2xl: clamp(1.6rem, 1.3rem + 1.4vw, 2.75rem);
   --text-3xl: clamp(2.1rem, 1.5rem + 2.8vw, 4rem);
-  --text-4xl: clamp(2.7rem, 1.6rem + 5vw, 6rem);
-  --text-display: clamp(2.9rem, 1.6rem + 5.4vw, 6.5rem);
+  --text-4xl: clamp(2.4rem, 1.5rem + 4.4vw, 6rem);
+  --text-display: clamp(2.5rem, 1.4rem + 5vw, 6.5rem);
 
   /* ── Easings (slow, weighty — nothing springy) ─────────────────────────── */
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);

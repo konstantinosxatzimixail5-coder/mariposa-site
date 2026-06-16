@@ -21,7 +21,11 @@ export function Hero() {
       // hero's negative-z layers fall into the root context *behind* the wave,
       // and the cyan ripples bleed across the video. The wave is unaffected
       // everywhere else — it still shows through the other sections.
-      className="relative isolate flex min-h-svh flex-col justify-center overflow-hidden px-6 md:px-10"
+      // min-h-svh (small viewport height) keeps the whole hero in frame even
+      // when mobile browser chrome is showing, so the copy is never cut off.
+      // Fluid block padding centres the column on tall screens and gives it
+      // breathing room (clearing the fixed nav) on short ones.
+      className="relative isolate flex min-h-svh flex-col justify-center overflow-hidden px-6 py-28 sm:py-32 md:px-10"
     >
       <Parallax speed={-0.25} className="absolute inset-0 -z-10">
         <div
@@ -43,11 +47,11 @@ export function Hero() {
         <span className="leaf-light leaf-light--b" />
       </div>
 
-      <div className="mx-auto w-full max-w-7xl pt-24">
+      <div className="mx-auto w-full max-w-7xl">
         <Reveal
           variant="reveal"
           as="p"
-          className="mb-6 flex items-center gap-3 text-sm uppercase tracking-[0.25em] text-amber"
+          className="mb-6 flex items-center gap-3 text-sm uppercase tracking-[0.2em] text-amber sm:tracking-[0.25em]"
         >
           <ButterflyMark className="h-5 w-5" />
           {BRAND.address.locality} · {BRAND.address.region}
@@ -75,17 +79,23 @@ export function Hero() {
           and served beneath the vines of Theologos, Rhodes.
         </Reveal>
 
-        <Reveal variant="reveal" as="div" delay={380} className="mt-10 flex flex-wrap items-center gap-4">
+        {/* CTAs stack full-width on phones, sit inline from sm up. */}
+        <Reveal
+          variant="reveal"
+          as="div"
+          delay={380}
+          className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+        >
           <a
             href={BRAND.reservationUrl}
-            className="rounded-full px-7 py-3.5 font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright"
+            className="rounded-full px-7 py-3.5 text-center font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright"
             style={{ background: "var(--color-amber)" }}
           >
             Make a Reservation
           </a>
           <a
             href="#family"
-            className="rounded-full border px-7 py-3.5 font-medium text-ivory transition-colors duration-200 hover:border-amber hover:text-amber"
+            className="rounded-full border px-7 py-3.5 text-center font-medium text-ivory transition-colors duration-200 hover:border-amber hover:text-amber"
             style={{ borderColor: "var(--color-line)" }}
           >
             Discover Mariposa
@@ -93,7 +103,7 @@ export function Hero() {
         </Reveal>
       </div>
 
-      <div className="mx-auto mt-16 flex w-full max-w-7xl items-center gap-3 text-xs uppercase tracking-[0.25em] text-ivory-dim">
+      <div className="mx-auto mt-12 flex w-full max-w-7xl items-center gap-3 text-xs uppercase tracking-[0.25em] text-ivory-dim sm:mt-16">
         <span
           className="h-px w-12 animate-pulse"
           style={{ background: "color-mix(in oklab, var(--color-ivory) 55%, transparent)" }}

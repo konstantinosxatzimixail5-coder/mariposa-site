@@ -1,14 +1,22 @@
 import { NextResponse } from "next/server";
+import { deliverReservation, type Booking } from "@/lib/reservation-delivery";
 
 /**
- * Reservation intake — placeholder booking endpoint.
+ * Reservation intake.
  *
- * This validates and acknowledges a request so the front-end form is genuinely
- * wired end-to-end. In production this handler is where you'd forward the
- * booking to the venue's inbox / reservation platform (e.g. email via Resend,
- * or a POST to OpenTable/Quandoo). Until that integration is supplied it simply
- * confirms receipt — the form already offers phone + WhatsApp as the live path.
+ * Validates a booking server-side, then delivers it to the restaurant over two
+ * independent channels — transactional email (Resend) and WhatsApp (Twilio).
+ * The two are attempted in parallel and a failure in one never discards the
+ * booking: as long as at least one configured channel delivers (or no channel
+ * is configured at all, e.g. local dev), the guest sees success. If every
+ * configured channel fails, we report an error so the form can fall back to the
+ * phone/WhatsApp links shown beneath it.
+ *
+ * Secrets live only in the environment — see .env.example for the full list.
  */
+
+// Twilio's SDK relies on Node APIs, so pin this handler to the Node runtime.
+export const runtime = "nodejs";
 
 const MAX_PARTY = 12;
 const SERVICE_OPEN = 13; // 13:00 — table seatings begin at lunch (doors open earlier, at 09:00)
@@ -27,6 +35,7 @@ const OCCASIONS = new Set([
 
 type ReservationPayload = {
   name?: unknown;
+  phone?: unknown;
   date?: unknown;
   time?: unknown;
   party?: unknown;
@@ -49,6 +58,15 @@ export async function POST(request: Request) {
   const errors: string[] = [];
 
   if (!isNonEmptyString(body.name)) errors.push("name");
+
+  // Phone is optional, but if supplied it must look like a real number
+  // (digits, with optional +, spaces, dashes and parens — 6 to 20 digits).
+  if (isNonEmptyString(body.phone)) {
+    const digits = body.phone.replace(/[^\d]/g, "");
+    if (!/^\+?[\d\s()-]+$/.test(body.phone) || digits.length < 6 || digits.length > 20) {
+      errors.push("phone");
+    }
+  }
 
   // Date must be a real, future-or-today calendar date.
   let dateValid = false;
@@ -86,11 +104,43 @@ export async function POST(request: Request) {
     );
   }
 
-  // Placeholder for the real downstream booking integration.
-  // e.g. await sendReservationEmail({ name, date, time, party, note })
+  const booking: Booking = {
+    name: (body.name as string).trim(),
+    phone: isNonEmptyString(body.phone) ? body.phone.trim() : "",
+    date: body.date as string,
+    time: body.time as string,
+    party,
+    occasion: typeof body.occasion === "string" ? body.occasion : "none",
+    note: isNonEmptyString(body.note) ? body.note.trim() : "",
+  };
 
+  const delivery = await deliverReservation(booking);
+
+  // Surface delivery failures in the server log regardless of outcome.
+  if (delivery.errors.length > 0) {
+    console.error("[reservations] delivery issues:", delivery.errors.join(" | "));
+  }
+
+  const attempted = [delivery.email, delivery.whatsapp].filter((s) => s !== "skipped");
+  const anyDelivered = attempted.includes("sent");
+  const allConfiguredFailed = attempted.length > 0 && !anyDelivered;
+
+  // Every configured channel failed — don't pretend the booking went through.
+  if (allConfiguredFailed) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "We couldn't send your request just now. Please call or WhatsApp us directly.",
+        delivery,
+      },
+      { status: 502 },
+    );
+  }
+
+  // Delivered through at least one channel (or nothing configured, e.g. dev).
   return NextResponse.json({
     ok: true,
     message: "Reservation request received.",
+    delivery,
   });
 }
