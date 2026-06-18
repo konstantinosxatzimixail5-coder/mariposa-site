@@ -51,7 +51,7 @@ type RawResult = {
 export async function getContent(): Promise<SiteContent> {
   let data: RawResult | null = null;
   try {
-    data = await client.fetch<RawResult>(QUERY, {}, { next: { revalidate: 60 } });
+    data = await client.fetch<RawResult>(QUERY, {}, { cache: "no-store" });
   } catch {
     return BRAND;
   }
