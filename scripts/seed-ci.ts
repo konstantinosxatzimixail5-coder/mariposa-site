@@ -161,8 +161,19 @@ async function run() {
     });
   }
 
-  await tx.commit();
+  const result = await tx.commit();
   console.log("✓ Seed complete — content written to the dataset.");
+  console.log("  commit results:", result.results?.length ?? "n/a");
+
+  // Verify, with the authenticated client, what now exists in the dataset.
+  const cfg = client.config();
+  const verify = await client.fetch(`{
+    "dishCount": count(*[_type == "dish"]),
+    "dishIds": *[_type == "dish"]._id,
+    "draftDishIds": *[_id in path("drafts.**") && _type == "dish"]._id
+  }`);
+  console.log("  VERIFY target:", JSON.stringify({ projectId: cfg.projectId, dataset: cfg.dataset }));
+  console.log("  VERIFY result:", JSON.stringify(verify));
 }
 
 run().catch((err) => {
