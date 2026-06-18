@@ -12,8 +12,9 @@ import { FAQ } from "@/components/sections/FAQ";
 import { Footer } from "@/components/sections/Footer";
 import { getContent } from "@/lib/content";
 
-// Refresh content from Sanity at most once a minute (ISR).
-export const revalidate = 60;
+// Read Sanity live on every request (no ISR/edge cache) so published content and
+// edits always appear immediately. Can be tightened back to ISR once stable.
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const content = await getContent();
