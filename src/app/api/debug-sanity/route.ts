@@ -2,41 +2,37 @@ import { NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
 import { projectId, dataset, apiVersion } from "@/sanity/env";
 
-// Always run fresh — never cached — so this reflects live Sanity right now.
+// Always run fresh — never cached.
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 /**
- * Temporary diagnostic. `published` uses the site's published-perspective client;
- * `raw` uses the raw perspective (drafts + published) so we can see whether dish
- * docs exist only as drafts. Remove once the content pipeline is confirmed.
+ * Temporary diagnostic. Reports whether the running deployment has the read
+ * token, which commit it's running, and what the site's own client reads.
+ * Remove once content is confirmed flowing.
  */
 export async function GET() {
-  const base = { projectId, dataset, apiVersion };
+  const base = {
+    projectId,
+    dataset,
+    apiVersion,
+    // Is the read token actually present in THIS running deployment?
+    tokenPresent: Boolean(process.env.SANITY_API_READ_TOKEN),
+    tokenLength: process.env.SANITY_API_READ_TOKEN?.length ?? 0,
+    // Which build is serving this? (Vercel system env)
+    commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "unknown",
+  };
   try {
-    const rawClient = client.withConfig({ perspective: "raw" });
-
-    const [publishedDishCount, rawIds] = await Promise.all([
-      client.fetch<number>(`count(*[_type == "dish"])`),
-      rawClient.fetch<{ dishIds: string[]; byType: Record<string, number> }>(`{
-        "dishIds": *[_type == "dish"]._id,
-        "byType": {
-          "dish": count(*[_type == "dish"]),
-          "testimonial": count(*[_type == "testimonial"]),
-          "service": count(*[_type == "service"]),
-          "occasion": count(*[_type == "occasion"]),
-          "familyMember": count(*[_type == "familyMember"]),
-          "siteSettings": count(*[_type == "siteSettings"])
-        }
-      }`),
-    ]);
-
+    // This is the site's own client (gets the token if it's set in env).
+    const data = await client.fetch<{ dishCount: number; dishNames: string[] }>(`{
+      "dishCount": count(*[_type == "dish"]),
+      "dishNames": *[_type == "dish"]|order(order asc).name
+    }`);
     return NextResponse.json({
       ok: true,
       ...base,
-      publishedDishCount,
-      rawDishIds: rawIds?.dishIds ?? [],
-      rawCountsByType: rawIds?.byType ?? {},
+      dishCount: data?.dishCount ?? 0,
+      dishNames: data?.dishNames ?? [],
     });
   } catch (err) {
     return NextResponse.json({
