@@ -174,6 +174,28 @@ async function run() {
   }`);
   console.log("  VERIFY target:", JSON.stringify({ projectId: cfg.projectId, dataset: cfg.dataset }));
   console.log("  VERIFY result:", JSON.stringify(verify));
+
+  // ANON read — exactly what the website does: no token, useCdn:false, published
+  // perspective. This runs from CI (which has network access), so it reveals
+  // whether an anonymous read of this (public) dataset actually returns the
+  // published dishes, or behaves as if empty.
+  const anonClient = createClient({
+    projectId: cfg.projectId!,
+    dataset: cfg.dataset!,
+    apiVersion: "2025-06-16",
+    useCdn: false,
+    perspective: "published",
+  });
+  try {
+    const anon = await anonClient.fetch(`{
+      "dishCount": count(*[_type == "dish"]),
+      "dishNames": *[_type == "dish"].name,
+      "settingsName": *[_type == "siteSettings"][0].name
+    }`);
+    console.log("  ANON (no token, like the site):", JSON.stringify(anon));
+  } catch (e) {
+    console.log("  ANON read error:", e instanceof Error ? e.message : String(e));
+  }
 }
 
 run().catch((err) => {
