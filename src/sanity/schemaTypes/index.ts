@@ -5,7 +5,8 @@ import { testimonial } from "./testimonial";
 import { familyMember } from "./familyMember";
 import { occasion } from "./occasion";
 import { service } from "./service";
+import { menuSection } from "./menuSection";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [siteSettings, dish, testimonial, familyMember, occasion, service],
+  types: [siteSettings, dish, testimonial, familyMember, occasion, service, menuSection],
 };

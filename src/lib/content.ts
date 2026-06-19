@@ -1,6 +1,26 @@
 import "server-only";
 import { client } from "@/sanity/lib/client";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { MENU, type MenuSection } from "@/lib/menu";
+
+const MENU_QUERY = /* groq */ `*[_type == "menuSection"]|order(order asc){
+  title,
+  subtitle,
+  "items": items[]{ name, description, price, vegetarian, vegan, glutenFree }
+}`;
+
+/**
+ * Full à la carte menu for /menu. Reads Sanity (menuSection docs), falls back to
+ * the static MENU when empty or unreachable.
+ */
+export async function getMenu(): Promise<MenuSection[]> {
+  try {
+    const data = await client.fetch<MenuSection[]>(MENU_QUERY, {}, { cache: "no-store" });
+    return data && data.length ? data : MENU;
+  } catch {
+    return MENU;
+  }
+}
 
 /**
  * Site content data layer.

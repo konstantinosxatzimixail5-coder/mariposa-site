@@ -128,7 +128,7 @@ export const BRAND = {
   },
   // Canonical, daily-changing menu (JS-rendered Elementor page). The signature
   // plates below are the recurring favourites guests ask for by name.
-  menuUrl: "https://mariposa.restaurant/mariposa-menu/",
+  menuUrl: "/menu",
   // The five plates guests name most. `tagline` is the single card line, `note`
   // the brand-voice detail description, `review` the real attributed Tripadvisor
   // pull-quote, and `media` the produced-asset slots (360° spin + short video)
