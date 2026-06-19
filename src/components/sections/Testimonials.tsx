@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { ReviewBadges } from "@/components/ReviewBadges";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 const AUTO_MS = 7000;
 
@@ -16,7 +17,13 @@ const AUTO_MS = 7000;
  * manual keyboard stepper under reduced motion. Closes on a link to read all
  * reviews on Tripadvisor. An aria-live region announces each quote change.
  */
-export function Testimonials({ content = BRAND }: { content?: SiteContent }) {
+export function Testimonials({
+  content = BRAND,
+  copy = COPY.reviews,
+}: {
+  content?: SiteContent;
+  copy?: Copy["reviews"];
+}) {
   const reducedMotion = useReducedMotion();
   const items = content.reviews;
   const [index, setIndex] = useState(0);
@@ -60,14 +67,14 @@ export function Testimonials({ content = BRAND }: { content?: SiteContent }) {
             ))}
           </div>
           <p className="text-balance text-sm uppercase tracking-[0.2em] text-ink-dim">
-            <span className="text-ink">{content.rating.toFixed(1)} stars</span> ·{" "}
-            {content.reviewCount} reviews · {content.award} ·{" "}
+            <span className="text-ink">{content.rating.toFixed(1)} {copy.starsSuffix}</span> ·{" "}
+            {content.reviewCount} {copy.reviewsLabel} · {content.award} ·{" "}
             <span className="text-amber-deep">{content.ranking}</span>
           </p>
         </div>
 
         <p className="mb-12 mt-8 font-display text-pretty" style={{ fontSize: "var(--text-xl)" }}>
-          288 reviews. 4.9 stars. One word keeps surfacing: <span className="italic text-gold">gem</span>.
+          {copy.headlinePrefix}<span className="italic text-gold">{copy.headlineWord}</span>{copy.headlineSuffix}
         </p>
 
         <div className="relative min-h-[16rem] md:min-h-[13rem]" aria-live="polite">
@@ -160,7 +167,7 @@ export function Testimonials({ content = BRAND }: { content?: SiteContent }) {
             className="inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
             style={{ borderColor: "var(--color-line)" }}
           >
-            Read all {content.reviewCount} reviews on Tripadvisor
+            {copy.tripadvisorCtaPrefix}{content.reviewCount}{copy.tripadvisorCtaSuffix}
           </a>
           <a
             href={content.googleReviewsUrl === "GOOGLE_REVIEWS_URL" ? content.googleMapsSearch : content.googleReviewsUrl}
@@ -169,7 +176,7 @@ export function Testimonials({ content = BRAND }: { content?: SiteContent }) {
             className="inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-[color:var(--color-amber-deep)] hover:text-[color:var(--color-amber-deep)]"
             style={{ borderColor: "var(--color-line)" }}
           >
-            Read our reviews on Google
+            {copy.googleCta}
           </a>
         </div>
 

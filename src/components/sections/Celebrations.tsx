@@ -5,6 +5,7 @@ import { Reveal } from "@/components/Reveal";
 import { Parallax } from "@/components/Parallax";
 import { IconFlute } from "@/components/SectionIcon";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 /**
  * Celebrations & Private Events. Mariposa as the setting for the marked days:
@@ -21,7 +22,13 @@ function planEvening(occasion: string) {
   window.dispatchEvent(new CustomEvent("mariposa:occasion", { detail: occasion }));
 }
 
-export function Celebrations({ content = BRAND }: { content?: SiteContent }) {
+export function Celebrations({
+  content = BRAND,
+  copy = COPY.celebrations,
+}: {
+  content?: SiteContent;
+  copy?: Copy["celebrations"];
+}) {
   return (
     <section
       id="celebrations"
@@ -53,7 +60,7 @@ export function Celebrations({ content = BRAND }: { content?: SiteContent }) {
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
           <Reveal as="p" className="eyebrow flex items-center justify-center gap-2.5 text-amber">
             <IconFlute className="h-[1.15rem] w-[1.15rem]" />
-            Celebrations &amp; Private Events
+            {copy.eyebrow}
           </Reveal>
           <Reveal
             as="h2"
@@ -61,7 +68,7 @@ export function Celebrations({ content = BRAND }: { content?: SiteContent }) {
             className="font-display mt-5 max-w-3xl text-balance text-ivory"
             style={{ fontSize: "var(--text-4xl)", lineHeight: 1.04 }}
           >
-            For the evenings that matter
+            {copy.heading}
           </Reveal>
         </div>
       </div>
@@ -81,7 +88,7 @@ export function Celebrations({ content = BRAND }: { content?: SiteContent }) {
               </h3>
               <p className="max-w-md text-pretty text-ink-dim">{occasion.line}</p>
               <span className="eyebrow mt-2 text-muted transition-colors duration-300 group-hover:text-[color:var(--color-amber-deep)]">
-                Plan this evening →
+                {copy.planThisEvening}
               </span>
             </button>
           ))}
@@ -94,11 +101,10 @@ export function Celebrations({ content = BRAND }: { content?: SiteContent }) {
             className="rounded-full px-8 py-4 font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright"
             style={{ background: "var(--color-amber)" }}
           >
-            Plan your evening with us
+            {copy.cta}
           </a>
           <p className="mt-5 max-w-md text-pretty text-sm text-muted">
-            Tell us the occasion and a little of what you have in mind. Konstantin
-            will take it from there.
+            {copy.footnote}
           </p>
         </div>
       </div>

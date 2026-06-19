@@ -2,8 +2,15 @@ import { Instagram, Facebook, MessageCircle, MapPin, Phone } from "lucide-react"
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { ContactForm } from "@/components/ContactForm";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
-export function Footer({ content = BRAND }: { content?: SiteContent }) {
+export function Footer({
+  content = BRAND,
+  copy = COPY.footer,
+}: {
+  content?: SiteContent;
+  copy?: Copy["footer"];
+}) {
   // Key-free OpenStreetMap embed around the venue (refine pin — notes/assets.md #6).
   const { lat, lng } = content.geo;
   const MAP_SRC = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.02}%2C${lat - 0.012}%2C${lng + 0.02}%2C${lat + 0.012}&layer=mapnik&marker=${lat}%2C${lng}`;
@@ -37,7 +44,7 @@ export function Footer({ content = BRAND }: { content?: SiteContent }) {
           </address>
 
           {/* Hours — the three real services */}
-          <h2 className="mt-8 text-xs uppercase tracking-[0.3em] text-amber-deep">Hours</h2>
+          <h2 className="mt-8 text-xs uppercase tracking-[0.3em] text-amber-deep">{copy.hoursLabel}</h2>
           <dl className="mt-4 space-y-2.5 text-sm">
             {content.services.map((service) => (
               <div key={service.label} className="flex justify-between gap-4">
@@ -99,7 +106,7 @@ export function Footer({ content = BRAND }: { content?: SiteContent }) {
 
         {/* Contact form */}
         <div className="md:col-span-4">
-          <h2 className="text-xs uppercase tracking-[0.3em] text-amber-deep">Write to Us</h2>
+          <h2 className="text-xs uppercase tracking-[0.3em] text-amber-deep">{copy.writeToUsLabel}</h2>
           <a
             href={content.emailHref}
             className="mb-5 mt-3 inline-block text-sm text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
@@ -111,7 +118,7 @@ export function Footer({ content = BRAND }: { content?: SiteContent }) {
 
         {/* Map */}
         <div className="md:col-span-4">
-          <h2 className="mb-5 text-xs uppercase tracking-[0.3em] text-amber-deep">Find Us</h2>
+          <h2 className="mb-5 text-xs uppercase tracking-[0.3em] text-amber-deep">{copy.findUsLabel}</h2>
           <div className="overflow-hidden rounded-sm border" style={{ borderColor: "var(--color-line)" }}>
             <iframe
               src={MAP_SRC}
@@ -132,7 +139,7 @@ export function Footer({ content = BRAND }: { content?: SiteContent }) {
           <p>
             © {new Date().getFullYear()} {content.legalName}. {content.meaning}.
           </p>
-          <p className="uppercase tracking-[0.2em]">Theologos · Rhodes · Greece</p>
+          <p className="uppercase tracking-[0.2em]">{copy.tagline}</p>
         </div>
       </div>
     </footer>

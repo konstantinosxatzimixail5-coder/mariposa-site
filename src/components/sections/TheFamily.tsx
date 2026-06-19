@@ -1,6 +1,7 @@
 import { Reveal } from "@/components/Reveal";
 import { IconButterfly } from "@/components/SectionIcon";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 type FamilyMember = SiteContent["family"][number];
 
@@ -15,7 +16,13 @@ type FamilyMember = SiteContent["family"][number];
  *
  * This is the last section and the brand's heart.
  */
-export function TheFamily({ content = BRAND }: { content?: SiteContent }) {
+export function TheFamily({
+  content = BRAND,
+  copy = COPY.family,
+}: {
+  content?: SiteContent;
+  copy?: Copy["family"];
+}) {
   return (
     <section
       id="family"
@@ -26,7 +33,7 @@ export function TheFamily({ content = BRAND }: { content?: SiteContent }) {
         <header className="mx-auto max-w-2xl text-center">
           <Reveal as="p" className="eyebrow flex items-center justify-center gap-2.5 text-amber-deep">
             <IconButterfly className="h-[1.15rem] w-[1.15rem]" />
-            The Family
+            {copy.eyebrow}
           </Reveal>
           <Reveal
             as="h2"
@@ -34,12 +41,10 @@ export function TheFamily({ content = BRAND }: { content?: SiteContent }) {
             className="font-display mt-5 text-balance"
             style={{ fontSize: "var(--text-4xl)", lineHeight: 1.04 }}
           >
-            One house, five hands
+            {copy.heading}
           </Reveal>
           <Reveal as="p" delay={140} className="mx-auto mt-7 max-w-xl text-pretty text-lg text-ink-dim">
-            Despoina built it. Konstantin opens the door. Mara carries the warmth.
-            Nickolas mixes the night. Salvatore writes the next chapter. You are
-            received the way we receive our own.
+            {copy.intro}
           </Reveal>
         </header>
 
@@ -54,12 +59,7 @@ export function TheFamily({ content = BRAND }: { content?: SiteContent }) {
           delay={120}
           className="mx-auto mt-20 max-w-2xl text-pretty text-center text-lg text-ink-dim md:mt-24"
         >
-          Mariposa runs on one family&apos;s hands. The recipes and the rooms are
-          Despoina&apos;s. The welcome is Konstantin&apos;s. The warmth passes from
-          Mara to your table, from Nickolas to your glass, and now from Salvatore
-          to the next plate of fresh pasta and bread. A family holds a standard the
-          way only a family can — personally. You arrive as a guest and you are
-          looked after as one of our own.
+          {copy.body}
         </Reveal>
 
         <Reveal
@@ -69,7 +69,7 @@ export function TheFamily({ content = BRAND }: { content?: SiteContent }) {
           style={{ fontSize: "var(--text-3xl)", lineHeight: 1.12 }}
         >
           <span className="italic">
-            Every table here is set the way we set <span className="text-gold">our own.</span>
+            {copy.pullQuoteLead}<span className="text-gold">{copy.pullQuoteEmphasis}</span>
           </span>
         </Reveal>
       </div>

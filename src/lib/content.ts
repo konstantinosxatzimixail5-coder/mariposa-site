@@ -1,6 +1,7 @@
 import "server-only";
 import { client } from "@/sanity/lib/client";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 import { MENU, type MenuSection } from "@/lib/menu";
 
 const MENU_QUERY = /* groq */ `*[_type == "menuSection"]|order(order asc){
@@ -175,4 +176,58 @@ export async function getContent(): Promise<SiteContent> {
     occasions,
     family,
   } as SiteContent;
+}
+
+export type { Copy };
+
+// Pull every editable string for the page-copy singleton, deep-merged below.
+const COPY_QUERY = /* groq */ `*[_type == "pageCopy"][0]{
+  hero, dishes, garden, chefsWords, experience, celebrations, reviews,
+  reservation, family, faq, footer
+}`;
+
+type Plain = Record<string, unknown>;
+const isObject = (v: unknown): v is Plain =>
+  typeof v === "object" && v !== null && !Array.isArray(v);
+const isBlank = (v: unknown): boolean =>
+  v === undefined || v === null || (typeof v === "string" && v.trim() === "");
+
+/**
+ * Deep-merge a Sanity-sourced value over a default, per-field. A blank string,
+ * null or undefined in the override falls back to the default. Arrays (e.g. the
+ * Garden beats) are taken wholesale from the override only when present and
+ * non-empty, otherwise the default array is kept — and each element is itself
+ * merged over the corresponding default to fill any blank fields.
+ */
+function deepMerge<T>(base: T, override: unknown): T {
+  if (Array.isArray(base)) {
+    if (!Array.isArray(override) || override.length === 0) return base;
+    return override.map((item, i) =>
+      i < base.length ? deepMerge(base[i], item) : item,
+    ) as unknown as T;
+  }
+  if (isObject(base)) {
+    const out: Plain = { ...base };
+    const ov = isObject(override) ? override : {};
+    for (const key of Object.keys(base as Plain)) {
+      out[key] = deepMerge((base as Plain)[key], ov[key]);
+    }
+    return out as T;
+  }
+  return (isBlank(override) ? base : override) as T;
+}
+
+/**
+ * Fetch editable page copy from Sanity (the pageCopy singleton), deep-merged
+ * over the COPY defaults so any blank field falls back per-field. Resilient: any
+ * failure or empty document resolves to COPY.
+ */
+export async function getCopy(): Promise<Copy> {
+  try {
+    const data = await client.fetch<Plain | null>(COPY_QUERY, {}, { cache: "no-store" });
+    if (!data) return COPY;
+    return deepMerge(COPY as unknown as Copy, data);
+  } catch {
+    return COPY;
+  }
 }
