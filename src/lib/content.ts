@@ -6,7 +6,15 @@ import { MENU, type MenuSection } from "@/lib/menu";
 const MENU_QUERY = /* groq */ `*[_type == "menuSection"]|order(order asc){
   title,
   subtitle,
-  "items": items[]{ name, description, price, vegetarian, vegan, glutenFree }
+  "items": items[]{
+    name, description, price, vegetarian, vegan, glutenFree, rating, reviewCount,
+    "photo": photo.asset->url,
+    "plated": plated.asset->url,
+    "detail": detail.asset->url,
+    "video": video.asset->url,
+    "spin": spin[].asset->url,
+    reviews[]{ author, quote, rating }
+  }
 }`;
 
 /**
