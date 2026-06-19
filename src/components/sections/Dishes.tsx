@@ -47,7 +47,7 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
           </Reveal>
         </div>
 
-        <ul className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-5">
+        <ul className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-3">
           {content.dishes.map((dish, i) => (
             <Reveal key={dish.slug} variant="reveal" delay={i * 70} as="li">
               <button
