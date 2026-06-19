@@ -179,6 +179,7 @@ async function run() {
         vegetarian: it.vegetarian,
         vegan: it.vegan,
         glutenFree: it.glutenFree,
+        rating: it.rating,
       })),
     });
   });

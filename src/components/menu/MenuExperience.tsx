@@ -1,0 +1,231 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { Instagram, Facebook, MessageCircle } from "lucide-react";
+import { ButterflyMark } from "@/components/ButterflyMark";
+import type { SiteContent } from "@/lib/brand";
+import type { MenuItem, MenuSection } from "@/lib/menu";
+import { StarRating } from "./StarRating";
+import { DishModal } from "./DishModal";
+import { ReservationModal } from "./ReservationModal";
+
+const INK = "var(--color-ink)";
+const IVORY = "var(--color-ivory)";
+const HAIRLINE = "color-mix(in oklab, var(--color-ivory) 14%, transparent)";
+const MUTED = "color-mix(in oklab, var(--color-ivory) 62%, transparent)";
+const PANEL = "color-mix(in oklab, var(--color-olive) 14%, var(--color-ink))";
+
+export function MenuExperience({ sections, content }: { sections: MenuSection[]; content: SiteContent }) {
+  const [dish, setDish] = useState<MenuItem | null>(null);
+  const [reserveOpen, setReserveOpen] = useState(false);
+  const [active, setActive] = useState(sections[0]?.title ?? "");
+  const refs = useRef<Record<string, HTMLElement | null>>({});
+
+  function jump(title: string) {
+    setActive(title);
+    refs.current[title]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  return (
+    <div className="min-h-screen" style={{ background: INK, color: IVORY }}>
+      {/* Header */}
+      <header
+        className="sticky top-0 z-50 border-b backdrop-blur"
+        style={{ borderColor: HAIRLINE, background: "color-mix(in oklab, var(--color-ink) 82%, transparent)" }}
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:px-10">
+          <Link href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3" aria-label={`${content.name}, home (opens in new tab)`}>
+            <ButterflyMark className="h-9 w-9 text-[color:var(--color-olive-light)]" />
+            <span className="flex flex-col leading-none">
+              <span className="font-display text-lg tracking-[0.3em]">MARIPOSA</span>
+              <span className="text-[0.6rem] tracking-[0.4em]" style={{ color: MUTED }}>RESTAURANT</span>
+            </span>
+          </Link>
+
+          <nav className="flex items-center gap-5 md:gap-7">
+            <Link
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs uppercase tracking-[0.2em] transition-colors hover:text-[color:var(--color-amber)]"
+            >
+              Home
+            </Link>
+            <button
+              type="button"
+              onClick={() => setReserveOpen(true)}
+              className="text-xs uppercase tracking-[0.2em] transition-colors hover:text-[color:var(--color-amber)]"
+            >
+              Reservation
+            </button>
+            <span className="hidden items-center gap-3 sm:flex" style={{ color: MUTED }}>
+              {content.social?.facebook ? (
+                <a href={content.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="transition-colors hover:text-[color:var(--color-amber)]">
+                  <Facebook className="h-4 w-4" />
+                </a>
+              ) : null}
+              {content.social?.instagram ? (
+                <a href={content.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition-colors hover:text-[color:var(--color-amber)]">
+                  <Instagram className="h-4 w-4" />
+                </a>
+              ) : null}
+              {content.whatsapp ? (
+                <a href={content.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="transition-colors hover:text-[color:var(--color-amber)]">
+                  <MessageCircle className="h-4 w-4" />
+                </a>
+              ) : null}
+            </span>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden px-6 pb-10 pt-16 text-center md:px-10 md:pt-24">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{ background: "radial-gradient(70% 60% at 50% 0%, color-mix(in oklab, var(--color-olive) 30%, transparent), transparent 70%)" }}
+        />
+        <p className="text-xs uppercase tracking-[0.35em]" style={{ color: "var(--color-amber)" }}>
+          Mariposa · Seasonal Kitchen
+        </p>
+        <h1 className="font-display mt-5" style={{ fontSize: "var(--text-4xl)", lineHeight: 1.02 }}>The Menu</h1>
+        <p className="mx-auto mt-6 max-w-xl text-pretty" style={{ color: MUTED }}>
+          Mediterranean plates built from the garden out. Tap any dish for photos, a
+          360° spin, the price, and what our guests are saying.
+        </p>
+        <span className="mx-auto mt-8 block h-px w-16" style={{ background: "var(--color-amber)" }} />
+      </section>
+
+      {/* Category pills */}
+      <div className="sticky top-[4.3rem] z-40 px-6 py-4 md:px-10" style={{ background: "color-mix(in oklab, var(--color-ink) 82%, transparent)" }}>
+        <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-2.5">
+          {sections.map((s) => {
+            const on = active === s.title;
+            return (
+              <button
+                key={s.title}
+                type="button"
+                onClick={() => jump(s.title)}
+                className="rounded-full border px-5 py-2 text-center transition-colors"
+                style={{
+                  borderColor: on ? "var(--color-amber)" : HAIRLINE,
+                  background: on ? "var(--color-amber)" : "transparent",
+                  color: on ? "var(--color-on-accent)" : IVORY,
+                }}
+              >
+                <span className="block text-xs font-medium uppercase tracking-[0.18em]">{s.title}</span>
+                {s.subtitle ? <span className="block text-[0.68rem] italic" style={{ color: on ? "var(--color-on-accent)" : MUTED }}>{s.subtitle}</span> : null}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Sections */}
+      <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 md:px-10">
+        <div className="flex flex-col gap-20">
+          {sections.map((section) => (
+            <section
+              key={section.title}
+              ref={(el) => { refs.current[section.title] = el; }}
+              style={{ scrollMarginTop: "9rem" }}
+            >
+              <div className="flex items-end justify-between border-b pb-4" style={{ borderColor: HAIRLINE }}>
+                <h2 className="font-display flex items-baseline gap-3" style={{ fontSize: "var(--text-2xl)" }}>
+                  {section.title}
+                  {section.subtitle ? <span className="text-base font-normal italic" style={{ color: MUTED }}>{section.subtitle}</span> : null}
+                </h2>
+                <span className="text-xs uppercase tracking-[0.2em]" style={{ color: MUTED }}>{section.items.length} dishes</span>
+              </div>
+
+              <ul className="mt-8 grid gap-5 md:grid-cols-2">
+                {section.items.map((item) => (
+                  <li key={item.name}>
+                    <DishCard item={item} onClick={() => setDish(item)} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer line */}
+      <footer className="border-t px-6 py-8 text-center" style={{ borderColor: HAIRLINE }}>
+        <p className="text-xs uppercase tracking-[0.25em]" style={{ color: MUTED }}>
+          {content.legalName ?? "Mariposa Restaurant"} · Open daily {content.hours?.time ?? "13:00 – 24:00"}
+        </p>
+      </footer>
+
+      {dish ? (
+        <DishModal
+          dish={dish}
+          onClose={() => setDish(null)}
+          onReserve={() => {
+            setDish(null);
+            setReserveOpen(true);
+          }}
+        />
+      ) : null}
+      {reserveOpen ? <ReservationModal content={content} onClose={() => setReserveOpen(false)} /> : null}
+    </div>
+  );
+
+  function DishCard({ item, onClick }: { item: MenuItem; onClick: () => void }) {
+    const tags = [
+      item.vegan ? "Vegan" : item.vegetarian ? "Vegetarian" : null,
+      item.glutenFree ? "Gluten-Free" : null,
+    ].filter(Boolean) as string[];
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="group flex w-full gap-4 rounded-xl border p-3 text-left transition-colors"
+        style={{ borderColor: HAIRLINE, background: PANEL }}
+      >
+        {/* Thumb */}
+        <div className="relative aspect-square w-28 shrink-0 overflow-hidden rounded-lg md:w-32">
+          {item.photo ? (
+            <Image src={item.photo} alt={item.name} fill sizes="8rem" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+          ) : (
+            <div
+              className="flex h-full w-full items-center justify-center text-[0.6rem] uppercase tracking-[0.15em]"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(45deg, color-mix(in oklab, var(--color-olive) 24%, var(--color-ink)) 0 10px, color-mix(in oklab, var(--color-olive) 12%, var(--color-ink)) 10px 20px)",
+                color: MUTED,
+              }}
+            >
+              Dish photo
+            </div>
+          )}
+          {item.spin && item.spin.length > 1 ? (
+            <span className="absolute left-2 top-2 rounded-full px-2 py-0.5 text-[0.6rem]" style={{ background: "color-mix(in oklab, var(--color-ink) 70%, transparent)", color: IVORY }}>
+              360°
+            </span>
+          ) : null}
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-3">
+            <h3 className="font-display truncate" style={{ fontSize: "var(--text-lg)" }}>{item.name}</h3>
+            {item.price ? <span className="font-display tabular-nums" style={{ color: "var(--color-amber-bright)" }}>€{item.price}</span> : null}
+          </div>
+          {item.description ? <p className="mt-1.5 line-clamp-2 text-sm" style={{ color: MUTED }}>{item.description}</p> : null}
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            {tags.map((t) => (
+              <span key={t} className="rounded-full px-2 py-0.5 text-[0.58rem] font-medium uppercase tracking-[0.1em]" style={{ background: "color-mix(in oklab, var(--color-olive) 28%, transparent)", color: "var(--color-amber-bright)" }}>
+                {t}
+              </span>
+            ))}
+            {item.rating ? <StarRating rating={item.rating} count={item.reviewCount} size={12} /> : null}
+          </div>
+        </div>
+      </button>
+    );
+  }
+}
