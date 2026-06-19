@@ -24,7 +24,7 @@ export function StarRating({
         ))}
       </span>
       {rating ? (
-        <span className="text-sm tabular-nums" style={{ color: "color-mix(in oklab, var(--color-ivory) 78%, transparent)" }}>
+        <span className="text-sm tabular-nums" style={{ color: "var(--color-ink-dim)" }}>
           {rating.toFixed(1)}
           {count ? ` · ${count} reviews` : null}
         </span>

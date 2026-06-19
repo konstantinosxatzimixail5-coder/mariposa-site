@@ -7,9 +7,10 @@ import type { MenuItem } from "@/lib/menu";
 import { StarRating } from "./StarRating";
 import { Spin360 } from "./Spin360";
 
-const PANEL = "color-mix(in oklab, var(--color-olive) 14%, var(--color-ink))";
-const HAIRLINE = "color-mix(in oklab, var(--color-ivory) 16%, transparent)";
-const MUTED = "color-mix(in oklab, var(--color-ivory) 64%, transparent)";
+// Light landing palette to match the page.
+const PANEL = "var(--color-bg)";
+const LINE = "var(--color-line)";
+const MUTED = "var(--color-ink-dim)";
 
 type TabKey = "spin" | "plated" | "detail" | "video";
 const TABS: { key: TabKey; label: string }[] = [
@@ -34,9 +35,7 @@ export function DishModal({
     detail: !!(dish.detail || dish.photo),
     video: !!dish.video,
   };
-  const [tab, setTab] = useState<TabKey>(
-    (TABS.find((t) => has[t.key])?.key as TabKey) ?? "spin",
-  );
+  const [tab, setTab] = useState<TabKey>((TABS.find((t) => has[t.key])?.key as TabKey) ?? "spin");
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -56,7 +55,7 @@ export function DishModal({
   return (
     <div
       className="fixed inset-0 z-[120] flex items-center justify-center p-4"
-      style={{ background: "color-mix(in oklab, var(--color-ink) 78%, transparent)" }}
+      style={{ background: "color-mix(in oklab, var(--color-ink) 70%, transparent)" }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -64,15 +63,15 @@ export function DishModal({
     >
       <div
         className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl border"
-        style={{ background: PANEL, borderColor: HAIRLINE, color: "var(--color-ivory)" }}
+        style={{ background: PANEL, borderColor: LINE, color: "var(--color-ink)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full"
-          style={{ background: "color-mix(in oklab, var(--color-ink) 55%, transparent)", color: "var(--color-ivory)" }}
+          className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border"
+          style={{ background: "color-mix(in oklab, var(--color-bg) 80%, transparent)", borderColor: LINE, color: "var(--color-ink)" }}
         >
           <X className="h-4 w-4" />
         </button>
@@ -91,9 +90,9 @@ export function DishModal({
               onClick={() => setTab(t.key)}
               className="flex-1 rounded-lg border px-2 py-2 text-xs font-medium uppercase tracking-[0.12em] transition-colors"
               style={{
-                borderColor: tab === t.key ? "var(--color-amber)" : HAIRLINE,
-                background: tab === t.key ? "color-mix(in oklab, var(--color-amber) 18%, transparent)" : "transparent",
-                color: has[t.key] ? "var(--color-ivory)" : MUTED,
+                borderColor: tab === t.key ? "var(--color-amber)" : LINE,
+                background: tab === t.key ? "color-mix(in oklab, var(--color-amber) 16%, transparent)" : "transparent",
+                color: has[t.key] ? "var(--color-ink)" : MUTED,
               }}
             >
               {t.label}
@@ -106,39 +105,26 @@ export function DishModal({
           <div className="flex items-baseline justify-between gap-4">
             <h2 className="font-display" style={{ fontSize: "var(--text-2xl)" }}>{dish.name}</h2>
             {dish.price ? (
-              <span className="font-display tabular-nums" style={{ fontSize: "var(--text-xl)", color: "var(--color-amber-bright)" }}>
-                €{dish.price}
-              </span>
+              <span className="font-display tabular-nums" style={{ fontSize: "var(--text-xl)", color: "var(--color-amber-deep)" }}>€{dish.price}</span>
             ) : null}
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
             {dish.rating ? <StarRating rating={dish.rating} count={dish.reviewCount} /> : null}
-            {tags.map((t) => (
-              <Tag key={t}>{t}</Tag>
-            ))}
+            {tags.map((t) => <Tag key={t}>{t}</Tag>)}
           </div>
 
-          {dish.description ? (
-            <p className="mt-4 text-pretty" style={{ color: MUTED }}>{dish.description}</p>
-          ) : null}
+          {dish.description ? <p className="mt-4 text-pretty" style={{ color: MUTED }}>{dish.description}</p> : null}
 
           {dish.reviews && dish.reviews.length > 0 ? (
-            <div className="mt-7 border-t pt-6" style={{ borderColor: HAIRLINE }}>
+            <div className="mt-7 border-t pt-6" style={{ borderColor: LINE }}>
               <h3 className="font-display italic" style={{ fontSize: "var(--text-lg)" }}>What guests say</h3>
               <ul className="mt-4 flex flex-col gap-4">
                 {dish.reviews.map((r, i) => (
-                  <li
-                    key={i}
-                    className="rounded-xl border p-4"
-                    style={{ borderColor: HAIRLINE, background: "color-mix(in oklab, var(--color-ink) 35%, transparent)" }}
-                  >
+                  <li key={i} className="rounded-xl border p-4" style={{ borderColor: LINE, background: "var(--color-surface)" }}>
                     <div className="flex items-center justify-between gap-3">
                       <span className="flex items-center gap-2.5">
-                        <span
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium"
-                          style={{ background: "var(--color-amber)", color: "var(--color-on-accent)" }}
-                        >
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium" style={{ background: "var(--color-amber)", color: "var(--color-on-accent)" }}>
                           {(r.author ?? "G").charAt(0)}
                         </span>
                         <span className="text-sm">{r.author ?? "Guest"}</span>
@@ -153,20 +139,10 @@ export function DishModal({
           ) : null}
 
           <div className="mt-7 grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full border px-5 py-3 text-sm font-medium"
-              style={{ borderColor: HAIRLINE, color: "var(--color-ivory)" }}
-            >
+            <button type="button" onClick={onClose} className="rounded-full border px-5 py-3 text-sm font-medium" style={{ borderColor: LINE, color: "var(--color-ink)" }}>
               Back to menu
             </button>
-            <button
-              type="button"
-              onClick={onReserve}
-              className="rounded-full px-5 py-3 text-sm font-medium transition-[background-color] hover:bg-amber-bright"
-              style={{ background: "var(--color-amber)", color: "var(--color-on-accent)" }}
-            >
+            <button type="button" onClick={onReserve} className="rounded-full px-5 py-3 text-sm font-medium transition-[background-color] hover:bg-amber-bright" style={{ background: "var(--color-amber)", color: "var(--color-on-accent)" }}>
               Reserve a table
             </button>
           </div>
@@ -193,14 +169,12 @@ function Placeholder({ label }: { label: string }) {
       className="flex h-full w-full flex-col items-center justify-center gap-2"
       style={{
         backgroundImage:
-          "repeating-linear-gradient(45deg, color-mix(in oklab, var(--color-olive) 22%, var(--color-ink)) 0 12px, color-mix(in oklab, var(--color-olive) 12%, var(--color-ink)) 12px 24px)",
-        color: "color-mix(in oklab, var(--color-ivory) 60%, transparent)",
+          "repeating-linear-gradient(45deg, color-mix(in oklab, var(--color-olive) 16%, var(--color-bg-alt)) 0 14px, color-mix(in oklab, var(--color-olive) 8%, var(--color-bg-alt)) 14px 28px)",
+        color: "var(--color-ink-dim)",
       }}
     >
       <span className="text-sm uppercase tracking-[0.18em]">{label}</span>
-      <span className="text-xs" style={{ color: "color-mix(in oklab, var(--color-ivory) 45%, transparent)" }}>
-        Add in the Studio
-      </span>
+      <span className="text-xs" style={{ color: "var(--color-muted)" }}>Add in the Studio</span>
     </div>
   );
 }
@@ -209,7 +183,7 @@ function Tag({ children }: { children: React.ReactNode }) {
   return (
     <span
       className="rounded-full px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.12em]"
-      style={{ background: "color-mix(in oklab, var(--color-olive) 30%, transparent)", color: "var(--color-amber-bright)" }}
+      style={{ background: "color-mix(in oklab, var(--color-olive) 16%, var(--color-surface))", color: "var(--color-amber-deep)" }}
     >
       {children}
     </span>
