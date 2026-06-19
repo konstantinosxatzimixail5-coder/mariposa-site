@@ -15,6 +15,7 @@ import { createReadStream, existsSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "next-sanity";
 import { BRAND } from "../src/lib/brand";
+import { MENU } from "../src/lib/menu";
 
 const token = process.env.SANITY_AUTH_TOKEN;
 if (!token) {
@@ -160,6 +161,27 @@ async function run() {
       order: i,
     });
   }
+
+  // Full menu sections
+  MENU.forEach((sec, i) => {
+    tx.createOrReplace({
+      _id: `menuSection.${i}`,
+      _type: "menuSection",
+      title: sec.title,
+      subtitle: sec.subtitle,
+      order: i,
+      items: sec.items.map((it, j) => ({
+        _type: "item",
+        _key: `${i}-${j}`,
+        name: it.name,
+        description: it.description,
+        price: it.price,
+        vegetarian: it.vegetarian,
+        vegan: it.vegan,
+        glutenFree: it.glutenFree,
+      })),
+    });
+  });
 
   const result = await tx.commit();
   console.log("✓ Seed complete — content written to the dataset.");

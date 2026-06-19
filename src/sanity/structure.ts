@@ -14,6 +14,7 @@ export const structure: StructureResolver = (S) =>
         .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
       S.divider(),
       S.documentTypeListItem("dish").title("Dishes"),
+      S.documentTypeListItem("menuSection").title("Menu (full)"),
       S.documentTypeListItem("testimonial").title("Reviews"),
       S.documentTypeListItem("service").title("Services"),
       S.documentTypeListItem("occasion").title("Occasions"),

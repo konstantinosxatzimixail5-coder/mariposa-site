@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { TiltCard } from "@/components/TiltCard";
@@ -90,10 +91,8 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
 
         {/* Discover the full, daily-changing menu */}
         <Reveal as="div" delay={120} className="mt-16 md:mt-20">
-          <a
-            href={content.menuUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/menu"
             className="group flex flex-col items-start justify-between gap-5 rounded-lg border p-8 transition-colors duration-300 hover:bg-[color-mix(in_oklab,var(--color-amber)_8%,var(--color-surface))] md:flex-row md:items-center md:p-10"
             style={{ borderColor: "var(--color-line)", background: "var(--color-surface)" }}
           >
@@ -109,7 +108,7 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
             <span className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-7 py-3.5 font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 group-hover:bg-amber-bright" style={{ background: "var(--color-amber)" }}>
               View the menu <ArrowUpRight className="h-4 w-4" />
             </span>
-          </a>
+          </Link>
         </Reveal>
       </div>
 
