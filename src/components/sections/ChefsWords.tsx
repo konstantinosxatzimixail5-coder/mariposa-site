@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/Reveal";
 import { IconChefMark } from "@/components/SectionIcon";
+import { COPY, type Copy } from "@/lib/copy";
 
 /**
  * Chef's Words. Two voices, one kitchen. Despoina's founding philosophy flows
@@ -7,7 +8,7 @@ import { IconChefMark } from "@/components/SectionIcon";
  * house each morning, a small menu changed often. Large clip-path quote reveals,
  * alternating alignment, a thin amber rule between the two voices.
  */
-export function ChefsWords() {
+export function ChefsWords({ copy = COPY.chefsWords }: { copy?: Copy["chefsWords"] }) {
   return (
     <section
       id="chefs-words"
@@ -17,7 +18,7 @@ export function ChefsWords() {
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <Reveal as="p" className="eyebrow flex items-center gap-2.5 text-amber-deep">
           <IconChefMark className="h-[1.15rem] w-[1.15rem]" />
-          Chef&apos;s Words
+          {copy.eyebrow}
         </Reveal>
         <Reveal
           as="h2"
@@ -25,7 +26,7 @@ export function ChefsWords() {
           className="font-display mt-5 max-w-3xl text-balance"
           style={{ fontSize: "var(--text-3xl)", lineHeight: 1.04 }}
         >
-          Two voices, one kitchen
+          {copy.heading}
         </Reveal>
 
         {/* Despoina — left-aligned founding voice */}
@@ -35,22 +36,20 @@ export function ChefsWords() {
             style={{ fontSize: "var(--text-2xl)", lineHeight: 1.18 }}
           >
             <Reveal variant="clip-reveal" as="span" className="block">
-              Good food begins in respect.
+              {copy.despoinaQuoteLine1}
             </Reveal>
             <Reveal variant="clip-reveal" as="span" delay={120} className="block">
-              For the ingredient, and for the
+              {copy.despoinaQuoteLine2}
             </Reveal>
             <Reveal variant="clip-reveal" as="span" delay={240} className="block italic">
-              <span className="text-gold">land that gives it.</span>
+              <span className="text-gold">{copy.despoinaQuoteLine3}</span>
             </Reveal>
           </blockquote>
           <Reveal as="p" delay={200} className="mt-7 max-w-xl text-pretty text-ink-dim">
-            Despoina draws the vegetables from the beds beside the terrace, picked
-            the morning they reach your plate, and cooks them the way she cooks at
-            home. The menu, the dishes and the look of the room all began with her.
+            {copy.despoinaBody}
           </Reveal>
           <figcaption className="eyebrow mt-6 text-amber-deep">
-            Despoina · Founder &amp; Chef
+            {copy.despoinaCaption}
           </figcaption>
         </figure>
 
@@ -66,23 +65,20 @@ export function ChefsWords() {
             style={{ fontSize: "var(--text-2xl)", lineHeight: 1.18 }}
           >
             <Reveal variant="clip-reveal" as="span" className="block">
-              I keep the menu small and
+              {copy.salvatoreQuoteLine1}
             </Reveal>
             <Reveal variant="clip-reveal" as="span" delay={120} className="block">
-              change it often, so every plate
+              {copy.salvatoreQuoteLine2}
             </Reveal>
             <Reveal variant="clip-reveal" as="span" delay={240} className="block italic">
-              <span className="text-gold">is cooked fresh.</span>
+              <span className="text-gold">{copy.salvatoreQuoteLine3}</span>
             </Reveal>
           </blockquote>
           <Reveal as="p" delay={200} className="ml-auto mt-7 max-w-xl text-pretty text-ink-dim">
-            Salvatore came from Sicily and now carries Despoina&apos;s kitchen
-            forward. The pasta is rolled by hand and the bread leaves his oven each
-            morning. Sicily meets Rhodes on one table, and the result is a handful
-            of flavors you rarely find twice.
+            {copy.salvatoreBody}
           </Reveal>
           <figcaption className="eyebrow mt-6 text-amber-deep">
-            Salvatore · Chef, Pasta &amp; Bread
+            {copy.salvatoreCaption}
           </figcaption>
         </figure>
       </div>

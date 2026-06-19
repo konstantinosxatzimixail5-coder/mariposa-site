@@ -15,6 +15,7 @@ import { createReadStream, existsSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "next-sanity";
 import { BRAND } from "../src/lib/brand";
+import { COPY } from "../src/lib/copy";
 import { MENU } from "../src/lib/menu";
 
 const token = process.env.SANITY_AUTH_TOKEN;
@@ -87,6 +88,26 @@ async function run() {
     address: { ...BRAND.address },
     geo: { ...BRAND.geo },
     hours: { ...BRAND.hours },
+  });
+
+  // Page copy (singleton) — every editable homepage string, pre-filled.
+  tx.createOrReplace({
+    _id: "pageCopy",
+    _type: "pageCopy",
+    hero: { ...COPY.hero },
+    dishes: { ...COPY.dishes },
+    garden: {
+      ...COPY.garden,
+      beats: COPY.garden.beats.map((b, i) => ({ _key: `beat-${i}`, ...b })),
+    },
+    chefsWords: { ...COPY.chefsWords },
+    experience: { ...COPY.experience },
+    celebrations: { ...COPY.celebrations },
+    reviews: { ...COPY.reviews },
+    reservation: { ...COPY.reservation },
+    family: { ...COPY.family },
+    faq: { ...COPY.faq },
+    footer: { ...COPY.footer },
   });
 
   // Dishes

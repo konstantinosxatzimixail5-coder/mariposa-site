@@ -9,6 +9,7 @@ import { TiltCard } from "@/components/TiltCard";
 import { DishDetail } from "@/components/DishDetail";
 import { IconCloche } from "@/components/SectionIcon";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 type ContentDish = SiteContent["dishes"][number];
 
@@ -19,7 +20,13 @@ type ContentDish = SiteContent["dishes"][number];
  * slots, the real Tripadvisor pull-quote and a brand-voice description. A closing
  * box carries guests to the full, daily-changing menu.
  */
-export function Dishes({ content = BRAND }: { content?: SiteContent }) {
+export function Dishes({
+  content = BRAND,
+  copy = COPY.dishes,
+}: {
+  content?: SiteContent;
+  copy?: Copy["dishes"];
+}) {
   const [active, setActive] = useState<ContentDish | null>(null);
 
   return (
@@ -32,7 +39,7 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
         <div className="max-w-2xl">
           <Reveal as="p" className="eyebrow flex items-center gap-2.5 text-amber-deep">
             <IconCloche className="h-[1.15rem] w-[1.15rem]" />
-            Menu · Signature Plates
+            {copy.eyebrow}
           </Reveal>
           <Reveal
             as="h2"
@@ -40,11 +47,10 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
             className="font-display mt-5 text-balance"
             style={{ fontSize: "var(--text-3xl)", lineHeight: 1.04 }}
           >
-            The plates guests ask for by name
+            {copy.heading}
           </Reveal>
           <Reveal as="p" delay={140} className="mt-7 max-w-xl text-pretty text-lg text-ink-dim">
-            Our menu changes with the garden and the day; these are the plates
-            guests ask for by name.
+            {copy.intro}
           </Reveal>
         </div>
 
@@ -77,7 +83,7 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
                     aria-hidden
                     className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-ivory)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   >
-                    View plate <ArrowUpRight className="h-4 w-4" />
+                    {copy.viewPlate} <ArrowUpRight className="h-4 w-4" />
                   </span>
                 </TiltCard>
                 <h3 className="font-display mt-4" style={{ fontSize: "var(--text-lg)" }}>
@@ -98,15 +104,14 @@ export function Dishes({ content = BRAND }: { content?: SiteContent }) {
           >
             <div>
               <h3 className="font-display" style={{ fontSize: "var(--text-xl)" }}>
-                Discover our full menu
+                {copy.fullMenuHeading}
               </h3>
               <p className="mt-2 max-w-xl text-pretty text-ink-dim">
-                The kitchen writes the day&apos;s menu around what the garden and
-                the catch give. See everything on the table right now.
+                {copy.fullMenuBody}
               </p>
             </div>
             <span className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-7 py-3.5 font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 group-hover:bg-amber-bright" style={{ background: "var(--color-amber)" }}>
-              View the menu <ArrowUpRight className="h-4 w-4" />
+              {copy.fullMenuCta} <ArrowUpRight className="h-4 w-4" />
             </span>
           </Link>
         </Reveal>

@@ -5,6 +5,7 @@ import { Reveal } from "@/components/Reveal";
 import { IconQuestion } from "@/components/SectionIcon";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { FAQS } from "@/lib/faq";
+import { COPY, type Copy } from "@/lib/copy";
 
 /**
  * FAQ. Ten answer-first questions in an accessible disclosure accordion, with a
@@ -19,7 +20,7 @@ import { FAQS } from "@/lib/faq";
  *    CSS grid-rows height transition), so the full text is present in the served
  *    HTML for crawlers, not injected on click.
  */
-export function FAQ() {
+export function FAQ({ copy = COPY.faq }: { copy?: Copy["faq"] }) {
   const reducedMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -48,7 +49,7 @@ export function FAQ() {
         <div className="mx-auto max-w-2xl text-center">
           <Reveal as="p" className="eyebrow flex items-center justify-center gap-2.5 text-amber-deep">
             <IconQuestion className="h-[1.15rem] w-[1.15rem]" />
-            Questions
+            {copy.eyebrow}
           </Reveal>
           <Reveal
             as="h2"
@@ -56,11 +57,10 @@ export function FAQ() {
             className="font-display mt-5 text-balance"
             style={{ fontSize: "var(--text-3xl)", lineHeight: 1.04 }}
           >
-            Good to know before you come
+            {copy.heading}
           </Reveal>
           <Reveal as="p" delay={140} className="mx-auto mt-7 max-w-md text-pretty text-ink-dim">
-            Where we are, how we cook, and how to find a table. If your question
-            is not here, call or write and we will gladly answer.
+            {copy.intro}
           </Reveal>
         </div>
 

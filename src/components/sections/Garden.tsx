@@ -3,6 +3,7 @@ import { Reveal } from "@/components/Reveal";
 import { Parallax } from "@/components/Parallax";
 import { IconSprig } from "@/components/SectionIcon";
 import { BRAND } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 /**
  * Garden & Philosophy. The three things that set Mariposa apart, each given its
@@ -12,31 +13,15 @@ import { BRAND } from "@/lib/brand";
  * fallback beneath the site-wide atmosphere layer.
  */
 
-const BEATS = [
-  {
-    label: "The Garden",
-    title: "Steps from the table",
-    body: "Vegetables and herbs grow the length of the terrace and are picked the morning they are served. When Despoina needs more lemon herbs, she gathers them while you take your seat.",
-    image: BRAND.gallery[2],
-    alt: "The planted beds running alongside the dining terrace",
-  },
-  {
-    label: "The Menu",
-    title: "Small, and always moving",
-    body: "A few dishes, chosen and replaced often, every plate cooked fresh. It keeps the kitchen honest and gives you flavors you rarely meet twice.",
-    image: BRAND.gallery[3],
-    alt: "A dish being finished in the Mariposa kitchen",
-  },
-  {
-    label: "The Setting",
-    title: "An earthy calm under the vines",
-    body: "Tables sit among the plants beneath a canopy of vine leaves, the light coming through soft and green. The evening slows the moment you arrive.",
-    image: BRAND.gallery[4],
-    alt: "The vine-shaded terrace in late-afternoon light",
-  },
+// Image and alt for each beat stay static (art direction); the label/title/body
+// copy is editable and supplied via `copy.beats`, zipped in order below.
+const BEAT_MEDIA = [
+  { image: BRAND.gallery[2], alt: "The planted beds running alongside the dining terrace" },
+  { image: BRAND.gallery[3], alt: "A dish being finished in the Mariposa kitchen" },
+  { image: BRAND.gallery[4], alt: "The vine-shaded terrace in late-afternoon light" },
 ] as const;
 
-export function Garden() {
+export function Garden({ copy = COPY.garden }: { copy?: Copy["garden"] }) {
   return (
     <section
       id="garden"
@@ -59,7 +44,7 @@ export function Garden() {
           <div className="md:col-span-6">
             <Reveal as="p" className="eyebrow flex items-center gap-2.5 text-amber-deep">
               <IconSprig className="h-[1.15rem] w-[1.15rem]" />
-              Garden &amp; Philosophy
+              {copy.eyebrow}
             </Reveal>
             <Reveal
               as="h2"
@@ -67,12 +52,10 @@ export function Garden() {
               className="font-display mt-5 text-balance"
               style={{ fontSize: "var(--text-4xl)", lineHeight: 1.04 }}
             >
-              Grown here, cooked here
+              {copy.heading}
             </Reveal>
             <Reveal as="p" delay={140} className="mt-7 max-w-md text-pretty text-lg text-ink-dim">
-              Three things shape every evening at Mariposa: a garden a few steps
-              away, a menu kept small so nothing sits, and a table set among the
-              plants. What the garden withholds, the island and the sea provide.
+              {copy.intro}
             </Reveal>
           </div>
 
@@ -106,12 +89,12 @@ export function Garden() {
 
         {/* The three differentiators, each its own beat */}
         <div className="mt-24 grid gap-10 md:mt-32 md:grid-cols-3 md:gap-8">
-          {BEATS.map((beat, i) => (
+          {copy.beats.map((beat, i) => (
             <Reveal key={beat.label} variant="reveal" delay={i * 90} as="article">
               <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
                 <Image
-                  src={beat.image}
-                  alt={beat.alt}
+                  src={BEAT_MEDIA[i]?.image ?? BRAND.gallery[2]}
+                  alt={BEAT_MEDIA[i]?.alt ?? ""}
                   fill
                   sizes="(min-width: 768px) 30vw, 100vw"
                   className="object-cover"

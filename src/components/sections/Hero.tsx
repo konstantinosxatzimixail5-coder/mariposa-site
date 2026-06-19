@@ -3,6 +3,7 @@ import { Parallax } from "@/components/Parallax";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { HeroVideo } from "@/components/HeroVideo";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 /**
  * Hero. Stacked background layers, back to front: the CSS gradient (-z-10, the
@@ -11,7 +12,13 @@ import { BRAND, type SiteContent } from "@/lib/brand";
  * dappled-light layer (-z-[4]) that drifts warm sun through a vine canopy across
  * the type. Copy clip-reveals on load over the top.
  */
-export function Hero({ content = BRAND }: { content?: SiteContent }) {
+export function Hero({
+  content = BRAND,
+  copy = COPY.hero,
+}: {
+  content?: SiteContent;
+  copy?: Copy["hero"];
+}) {
   return (
     <section
       id="top"
@@ -62,10 +69,10 @@ export function Hero({ content = BRAND }: { content?: SiteContent }) {
               altering the visual line, which reads as the tagline. */}
           <span className="sr-only">{content.name} — </span>
           <Reveal variant="clip-reveal" as="span" className="block">
-            The hidden gem
+            {copy.headingLine1}
           </Reveal>
           <Reveal variant="clip-reveal" as="span" delay={140} className="block italic">
-            <span className="text-gold-bright">above the Aegean</span>
+            <span className="text-gold-bright">{copy.headingLine2}</span>
           </Reveal>
         </h1>
 
@@ -75,8 +82,7 @@ export function Hero({ content = BRAND }: { content?: SiteContent }) {
           delay={260}
           className="mt-8 max-w-xl text-pretty text-lg text-ivory-dim"
         >
-          A family kitchen where the Mediterranean is grown in our own garden
-          and served beneath the vines of Theologos, Rhodes.
+          {copy.intro}
         </Reveal>
 
         {/* CTAs stack full-width on phones, sit inline from sm up. */}
@@ -91,14 +97,14 @@ export function Hero({ content = BRAND }: { content?: SiteContent }) {
             className="rounded-full px-7 py-3.5 text-center font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright"
             style={{ background: "var(--color-amber)" }}
           >
-            Make a Reservation
+            {copy.primaryCta}
           </a>
           <a
             href="#family"
             className="rounded-full border px-7 py-3.5 text-center font-medium text-ivory transition-colors duration-200 hover:border-amber hover:text-amber"
             style={{ borderColor: "var(--color-line)" }}
           >
-            Discover Mariposa
+            {copy.secondaryCta}
           </a>
         </Reveal>
       </div>
@@ -108,7 +114,7 @@ export function Hero({ content = BRAND }: { content?: SiteContent }) {
           className="h-px w-12 animate-pulse"
           style={{ background: "color-mix(in oklab, var(--color-ivory) 55%, transparent)" }}
         />
-        Scroll
+        {copy.scroll}
       </div>
     </section>
   );

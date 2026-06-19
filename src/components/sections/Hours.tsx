@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { IconClock } from "@/components/SectionIcon";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { COPY, type Copy } from "@/lib/copy";
 
 /**
  * The Experience. The day at Mariposa told in its three services — breakfast as
@@ -10,7 +11,13 @@ import { BRAND, type SiteContent } from "@/lib/brand";
  * set in hung serif numerals, and a single evocative line. No "open daily until
  * midnight"; the real rhythm, stated plainly and unhurried.
  */
-export function Hours({ content = BRAND }: { content?: SiteContent }) {
+export function Hours({
+  content = BRAND,
+  copy = COPY.experience,
+}: {
+  content?: SiteContent;
+  copy?: Copy["experience"];
+}) {
   return (
     <section
       id="experience"
@@ -21,7 +28,7 @@ export function Hours({ content = BRAND }: { content?: SiteContent }) {
         <div className="mx-auto max-w-2xl text-center">
           <Reveal as="p" className="eyebrow flex items-center justify-center gap-2.5 text-amber-deep">
             <IconClock className="h-[1.15rem] w-[1.15rem]" />
-            The Experience
+            {copy.eyebrow}
           </Reveal>
           <Reveal
             as="h2"
@@ -29,12 +36,10 @@ export function Hours({ content = BRAND }: { content?: SiteContent }) {
             className="font-display mt-5 text-balance"
             style={{ fontSize: "var(--text-3xl)", lineHeight: 1.04 }}
           >
-            One long, unhurried day
+            {copy.heading}
           </Reveal>
           <Reveal as="p" delay={140} className="mx-auto mt-7 max-w-md text-pretty text-ink-dim">
-            The garden, the vines and the light shift through the hours, and the
-            kitchen follows. We hold only a handful of covers each service, so we
-            gently suggest reserving ahead.
+            {copy.intro}
           </Reveal>
         </div>
 
