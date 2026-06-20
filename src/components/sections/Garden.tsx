@@ -65,7 +65,7 @@ export function Garden({ copy = COPY.garden }: { copy?: Copy["garden"] }) {
                 <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
                   <Image
                     src={BRAND.gallery[0]}
-                    alt="Detail of the garden terrace and its planted beds"
+                    alt="The planted vegetable beds in the garden at Mariposa restaurant, Theologos, Rhodes"
                     fill
                     sizes="(min-width: 768px) 25vw, 50vw"
                     className="object-cover"
@@ -76,7 +76,7 @@ export function Garden({ copy = COPY.garden }: { copy?: Copy["garden"] }) {
                 <div className="relative mt-10 aspect-[3/4] overflow-hidden rounded-sm">
                   <Image
                     src={BRAND.gallery[1]}
-                    alt="The vine-shaded dining terrace in late-afternoon light"
+                    alt="The vine-shaded dining terrace at Mariposa in late-afternoon light, Theologos, Rhodes"
                     fill
                     sizes="(min-width: 768px) 25vw, 50vw"
                     className="object-cover"

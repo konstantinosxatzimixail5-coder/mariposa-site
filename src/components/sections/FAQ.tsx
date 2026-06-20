@@ -24,9 +24,21 @@ export function FAQ({ copy = COPY.faq }: { copy?: Copy["faq"] }) {
   const reducedMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  // FAQPage built from the same FAQS source the UI renders, so the marked-up
+  // answers always match the visible text verbatim. Linked by @id into the
+  // restaurant/website graph emitted in RestaurantSchema so the entities stay
+  // connected. Google has largely retired FAQ rich results for non-authoritative
+  // sites, so the real value here is GEO/AIO: clean, citable answers for ChatGPT,
+  // Perplexity, Claude and AI Overviews.
+  const SITE_URL = "https://mariposa.restaurant";
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${SITE_URL}/#faq`,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": `${SITE_URL}/#restaurant` },
+    // Flags the Q&A block as voice/assistant-readable for AI answer engines.
+    speakable: { "@type": "SpeakableSpecification", cssSelector: ["#faq"] },
     mainEntity: FAQS.map((item) => ({
       "@type": "Question",
       name: item.q,

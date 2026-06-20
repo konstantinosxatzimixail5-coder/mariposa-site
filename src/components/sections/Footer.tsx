@@ -11,9 +11,12 @@ export function Footer({
   content?: SiteContent;
   copy?: Copy["footer"];
 }) {
-  // Key-free OpenStreetMap embed around the venue (refine pin — notes/assets.md #6).
+  // Key-free Google Maps embed pinned to the venue's exact coordinates. Google
+  // (rather than OSM) reinforces the local-entity signal, and the coordinates
+  // here match the JSON-LD `geo`/`hasMap` and the on-page address exactly.
   const { lat, lng } = content.geo;
-  const MAP_SRC = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.02}%2C${lat - 0.012}%2C${lng + 0.02}%2C${lat + 0.012}&layer=mapnik&marker=${lat}%2C${lng}`;
+  const MAP_SRC = `https://maps.google.com/maps?q=${lat},${lng}&z=15&hl=en&output=embed`;
+  const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   return (
     <footer
       id="location"
@@ -122,12 +125,22 @@ export function Footer({
           <div className="overflow-hidden rounded-sm border" style={{ borderColor: "var(--color-line)" }}>
             <iframe
               src={MAP_SRC}
-              title={`Map showing ${content.name} in ${content.address.locality}, ${content.address.region}`}
+              title={`Google Map showing ${content.name} in ${content.address.locality}, ${content.address.region}`}
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
               className="aspect-[4/3] w-full grayscale-[0.3]"
               style={{ border: 0 }}
             />
           </div>
+          <a
+            href={DIRECTIONS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-2 text-sm text-ink-dim transition-colors duration-200 hover:text-[color:var(--color-amber-deep)]"
+          >
+            <MapPin className="h-4 w-4 text-[color:var(--color-amber-deep)]" aria-hidden />
+            Get directions
+          </a>
         </div>
       </div>
 

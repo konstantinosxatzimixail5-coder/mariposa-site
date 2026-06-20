@@ -66,7 +66,7 @@ export function ReviewBadges({ content = BRAND }: { content?: SiteContent }) {
       >
         <Image
           src="/images/logo/travelers-choice-2025.svg"
-          alt="Tripadvisor Travelers' Choice Awards 2025"
+          alt="Tripadvisor Travelers' Choice 2025 award won by Mariposa Restaurant, Theologos, Rhodes"
           width={128}
           height={128}
           className="h-28 w-28"

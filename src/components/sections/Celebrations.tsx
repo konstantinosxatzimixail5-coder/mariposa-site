@@ -41,7 +41,7 @@ export function Celebrations({
           <div className="relative h-[120%] w-full">
             <Image
               src={BRAND.gallery[8]}
-              alt="An evening laid out beneath the vines at Mariposa"
+              alt="A celebration dinner laid out beneath the vines at Mariposa, Theologos, Rhodes"
               fill
               priority={false}
               sizes="100vw"
