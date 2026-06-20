@@ -66,7 +66,7 @@ export function Dishes({
                 <TiltCard className="relative aspect-[4/5] overflow-hidden rounded-sm">
                   <Image
                     src={dish.image}
-                    alt={dish.name}
+                    alt={`${dish.name} at Mariposa restaurant in Theologos, Rhodes — ${dish.tagline}`}
                     fill
                     sizes="(min-width: 1024px) 18vw, (min-width: 768px) 30vw, 45vw"
                     className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.05]"

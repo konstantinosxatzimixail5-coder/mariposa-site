@@ -58,7 +58,7 @@ export function Hours({
               >
                 <Image
                   src={service.image}
-                  alt={`The Mariposa terrace during ${service.label.toLowerCase()} service`}
+                  alt={`The garden terrace at Mariposa, Theologos, Rhodes, during ${service.label.toLowerCase()} service`}
                   fill
                   sizes="(min-width: 768px) 12rem, 11rem"
                   className="object-cover"

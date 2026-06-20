@@ -177,7 +177,7 @@ export function MenuExperience({
       >
         <div className="relative aspect-square w-28 shrink-0 overflow-hidden rounded-lg md:w-32">
           {item.photo ? (
-            <Image src={item.photo} alt={item.name} fill sizes="8rem" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+            <Image src={item.photo} alt={`${item.name} at Mariposa restaurant, Theologos, Rhodes`} fill sizes="8rem" className="object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
             <div
               className="flex h-full w-full items-center justify-center text-[0.6rem] uppercase tracking-[0.15em]"

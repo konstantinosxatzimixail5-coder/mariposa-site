@@ -46,10 +46,16 @@ export function RestaurantSchema() {
     "@type": "PostalAddress",
     streetAddress: BRAND.address.street,
     addressLocality: BRAND.address.locality,
-    addressRegion: BRAND.address.region,
+    // The administrative region (perifereia) for schema precision; the island
+    // "Rhodes" is what we surface to guests in the visible UI.
+    addressRegion: "South Aegean",
     postalCode: BRAND.address.postalCode,
     addressCountry: "GR",
   };
+
+  // Google Maps link pinned to the exact coordinates — matches the embedded map
+  // in the footer and the `geo` block below.
+  const mapUrl = `https://www.google.com/maps?q=${BRAND.geo.lat},${BRAND.geo.lng}`;
 
   const founder = { "@type": "Person", name: "Despoina", jobTitle: "Founder & Chef" };
   const employees = BRAND.family.map((m) => ({
@@ -60,8 +66,11 @@ export function RestaurantSchema() {
 
   const sameAs = [BRAND.social.instagram, BRAND.social.facebook, BRAND.tripadvisorUrl];
 
+  // Restaurant is a subtype of FoodEstablishment → LocalBusiness, so a single
+  // multi-typed node satisfies both "Restaurant" and "LocalBusiness" without a
+  // second business node (which would risk duplicate/conflicting NAP).
   const restaurant = {
-    "@type": "Restaurant",
+    "@type": ["Restaurant", "LocalBusiness"],
     "@id": RESTAURANT_ID,
     name: BRAND.legalName,
     description: DESCRIPTION,
@@ -73,6 +82,7 @@ export function RestaurantSchema() {
     image: `${SITE_URL}/og.jpg`,
     acceptsReservations: true,
     address,
+    hasMap: mapUrl,
     geo: {
       "@type": "GeoCoordinates",
       latitude: BRAND.geo.lat,
@@ -86,6 +96,9 @@ export function RestaurantSchema() {
         closes: BRAND.hours.closes,
       },
     ],
+    // The 4.9 / 288 figure is the venue's verified Tripadvisor rating, shown
+    // visibly on the page (the Reviews badge) — a hard Google requirement: the
+    // marked-up rating must be user-visible, never schema-only.
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: BRAND.rating,
@@ -93,13 +106,29 @@ export function RestaurantSchema() {
       bestRating: 5,
       worstRating: 1,
     },
-    // A handful of real, attributed Tripadvisor excerpts for richer understanding.
-    review: BRAND.reviews.slice(0, 4).map((r) => ({
-      "@type": "Review",
-      reviewBody: r.quote,
-      author: { "@type": "Person", name: r.author },
-      reviewRating: { "@type": "Rating", ratingValue: 5, bestRating: 5, worstRating: 1 },
-    })),
+    // Genuine, attributed third-party guest reviews — exactly the ones rendered
+    // on the homepage (the Tripadvisor carousel excerpts plus the Google review),
+    // each marked up verbatim with its real author and source.
+    //
+    // Google review snippets are ONLY eligible for authentic third-party reviews;
+    // self-authored / business-written reviews are not, so nothing here is
+    // invented. `publisher` records the platform each excerpt is drawn from.
+    review: [
+      ...BRAND.reviews.slice(0, 4).map((r) => ({
+        "@type": "Review",
+        reviewBody: r.quote,
+        author: { "@type": "Person", name: r.author },
+        reviewRating: { "@type": "Rating", ratingValue: 5, bestRating: 5, worstRating: 1 },
+        publisher: { "@type": "Organization", name: "Tripadvisor" },
+      })),
+      {
+        "@type": "Review",
+        reviewBody: BRAND.googleReview.quote,
+        author: { "@type": "Person", name: BRAND.googleReview.author },
+        reviewRating: { "@type": "Rating", ratingValue: 5, bestRating: 5, worstRating: 1 },
+        publisher: { "@type": "Organization", name: BRAND.googleReview.source },
+      },
+    ],
     award: BRAND.award,
     hasMenu: { "@id": `${SITE_URL}/#menu` },
     founder,
