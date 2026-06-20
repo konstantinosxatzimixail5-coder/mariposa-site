@@ -1,4 +1,5 @@
 import { BRAND } from "@/lib/brand";
+import { MENU_PUBLISHED } from "@/lib/flags";
 
 /**
  * The site's full schema.org graph, built entirely from the single BRAND source
@@ -130,7 +131,7 @@ export function RestaurantSchema() {
       },
     ],
     award: BRAND.award,
-    hasMenu: { "@id": `${SITE_URL}/#menu` },
+    ...(MENU_PUBLISHED ? { hasMenu: { "@id": `${SITE_URL}/#menu` } } : {}),
     founder,
     employee: employees,
     amenityFeature: [
@@ -185,7 +186,10 @@ export function RestaurantSchema() {
     "@id": `${SITE_URL}/#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Menu", item: BRAND.menuUrl },
+      // The Menu breadcrumb only appears while the menu page is published.
+      ...(MENU_PUBLISHED
+        ? [{ "@type": "ListItem", position: 2, name: "Menu", item: BRAND.menuUrl }]
+        : []),
     ],
   };
 
@@ -208,9 +212,13 @@ export function RestaurantSchema() {
     },
   };
 
+  // While the menu is hidden, drop the Menu node from the graph (its
+  // `hasMenu` reference on the restaurant is also omitted below).
   const graph = {
     "@context": "https://schema.org",
-    "@graph": [restaurant, organization, website, breadcrumb, menu],
+    "@graph": MENU_PUBLISHED
+      ? [restaurant, organization, website, breadcrumb, menu]
+      : [restaurant, organization, website, breadcrumb],
   };
 
   return (

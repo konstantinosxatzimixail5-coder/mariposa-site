@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useReducedMotion } from "@/lib/useReducedMotion";
+import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
 import { useLenis } from "./SmoothScroll";
 import { ButterflyMark } from "./ButterflyMark";
 import { BRAND } from "@/lib/brand";
@@ -17,12 +18,23 @@ export function Preloader() {
   const [done, setDone] = useState(false);
   const skipped = useRef(false);
 
+  // The intro is a desktop flourish only. On touch devices (coarse pointer) it
+  // locks scroll for over two seconds and is heavy on first paint, so we skip it
+  // there entirely. Detected in a layout effect (before paint) to avoid a flash.
+  const [coarse, setCoarse] = useState(false);
+  useIsomorphicLayoutEffect(() => {
+    if (typeof window !== "undefined" && !window.matchMedia("(pointer: fine)").matches) {
+      setCoarse(true);
+    }
+  }, []);
+  const skipIntro = reducedMotion || coarse;
+
   // Count-up + reveal. Runs once; deliberately independent of `lenis` so the
   // timing loop is never torn down and restarted when smooth-scroll initialises
   // (which would reset the counter and freeze the intro). A hard fallback timer
   // guarantees the overlay always dismisses even if rAF is throttled.
   useEffect(() => {
-    if (reducedMotion) {
+    if (skipIntro) {
       setDone(true);
       return;
     }
@@ -54,12 +66,17 @@ export function Preloader() {
       cancelAnimationFrame(raf);
       window.clearTimeout(fallback);
     };
-  }, [reducedMotion]);
+  }, [skipIntro]);
 
   // Lock scroll while the overlay is up; release once it's gone. Kept separate
-  // from the timing loop so attaching to Lenis doesn't restart the count.
+  // from the timing loop so attaching to Lenis doesn't restart the count. When
+  // the intro is skipped, never lock — just make sure scrolling is free.
   useEffect(() => {
-    if (reducedMotion) return;
+    if (skipIntro) {
+      document.documentElement.classList.remove("lenis-stopped");
+      document.body.style.overflow = "";
+      return;
+    }
     if (done) {
       lenis?.start();
       document.documentElement.classList.remove("lenis-stopped");
@@ -69,7 +86,11 @@ export function Preloader() {
       document.documentElement.classList.add("lenis-stopped");
       document.body.style.overflow = "hidden";
     }
-  }, [done, lenis, reducedMotion]);
+  }, [done, lenis, skipIntro]);
+
+  // No intro on touch / reduced-motion: render nothing (and never paint the
+  // overlay), so the page is immediately scrollable.
+  if (skipIntro) return null;
 
   const draw = progress / 100;
 

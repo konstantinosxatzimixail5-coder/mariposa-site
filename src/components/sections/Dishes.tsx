@@ -10,6 +10,7 @@ import { DishDetail } from "@/components/DishDetail";
 import { IconCloche } from "@/components/SectionIcon";
 import { BRAND, type SiteContent } from "@/lib/brand";
 import { COPY, type Copy } from "@/lib/copy";
+import { MENU_PUBLISHED } from "@/lib/flags";
 
 type ContentDish = SiteContent["dishes"][number];
 
@@ -95,7 +96,8 @@ export function Dishes({
           ))}
         </ul>
 
-        {/* Discover the full, daily-changing menu */}
+        {/* Discover the full, daily-changing menu — hidden while MENU_PUBLISHED is off. */}
+        {MENU_PUBLISHED ? (
         <Reveal as="div" delay={120} className="mt-16 md:mt-20">
           <Link
             href="/menu"
@@ -115,6 +117,7 @@ export function Dishes({
             </span>
           </Link>
         </Reveal>
+        ) : null}
       </div>
 
       {active ? <DishDetail dish={active} onClose={() => setActive(null)} /> : null}

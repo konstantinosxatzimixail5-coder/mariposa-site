@@ -27,8 +27,12 @@ export function Parallax({
     const el = ref.current;
     if (!el) return;
 
+    // Parallax is a desktop/wheel enhancement only. Scrubbed ScrollTrigger forces
+    // layout work on every scroll frame, which makes touch scrolling stutter, so
+    // we gate it to fine-pointer devices — phones/tablets get a static element
+    // (and so do reduced-motion users).
     const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
       gsap.fromTo(
         el,
         { yPercent: -speed * 50 },
