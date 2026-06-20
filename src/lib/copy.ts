@@ -124,6 +124,10 @@ export const COPY = {
     findUsLabel: "Find Us",
     tagline: "Theologos · Rhodes · Greece",
   },
+  menu: {
+    legal:
+      "All prices include VAT.\n*Service charge / tip is not included in the price.\nPlease inform our staff of any allergies or dietary restrictions. Our dishes may contain or come into contact with allergens such as: gluten, nuts, dairy, fish, shellfish, eggs, soy, celery, mustard, sesame, sulphites, lupin.\nSome dishes contain raw or lightly cooked fish/meat. Consumption may not be suitable for pregnant women or individuals with weakened immune systems.\nRestaurant Manager & Owner: Maria Diakosavva.\nAll products are prepared and served in compliance with EFET (Hellenic Food Authority) and Health Service regulations.",
+  },
 } as const;
 
 // Widen COPY's deeply-literal `as const` type to plain string so a

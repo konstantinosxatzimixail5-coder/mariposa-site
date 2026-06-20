@@ -23,6 +23,7 @@ export const pageCopy = defineType({
     { name: "family", title: "Family" },
     { name: "faq", title: "FAQ" },
     { name: "footer", title: "Footer" },
+    { name: "menu", title: "Menu page" },
   ],
   fields: [
     // Hero
@@ -209,6 +210,22 @@ export const pageCopy = defineType({
         defineField({ name: "writeToUsLabel", title: "Write to Us label", type: "string" }),
         defineField({ name: "findUsLabel", title: "Find Us label", type: "string" }),
         defineField({ name: "tagline", title: "Tagline", type: "string" }),
+      ],
+    }),
+
+    // Menu page
+    defineField({
+      name: "menu",
+      title: "Menu page",
+      type: "object",
+      group: "menu",
+      fields: [
+        defineField({
+          name: "legal",
+          title: "Legal / allergen note (one line per paragraph)",
+          type: "text",
+          rows: 8,
+        }),
       ],
     }),
   ],

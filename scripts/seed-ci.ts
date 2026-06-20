@@ -108,6 +108,7 @@ async function run() {
     family: { ...COPY.family },
     faq: { ...COPY.faq },
     footer: { ...COPY.footer },
+    menu: { ...COPY.menu },
   });
 
   // Dishes

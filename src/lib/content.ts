@@ -183,7 +183,7 @@ export type { Copy };
 // Pull every editable string for the page-copy singleton, deep-merged below.
 const COPY_QUERY = /* groq */ `*[_type == "pageCopy"][0]{
   hero, dishes, garden, chefsWords, experience, celebrations, reviews,
-  reservation, family, faq, footer
+  reservation, family, faq, footer, menu
 }`;
 
 type Plain = Record<string, unknown>;
