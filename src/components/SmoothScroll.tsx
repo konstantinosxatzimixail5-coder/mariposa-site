@@ -36,6 +36,13 @@ export function SmoothScroll({
 
   useEffect(() => {
     if (reducedMotion) return;
+    // Smooth scroll is a desktop/wheel enhancement. On touch devices (phones,
+    // tablets) Lenis can fight native momentum scrolling and leave the page
+    // feeling stuck, so we skip it there and use native scrolling. GSAP
+    // ScrollTrigger falls back to its own native scroll listener.
+    if (typeof window !== "undefined" && !window.matchMedia("(pointer: fine)").matches) {
+      return;
+    }
 
     const instance = new Lenis({
       duration: 1.15,
