@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { MenuExperience } from "@/components/menu/MenuExperience";
-import { getContent, getMenu } from "@/lib/content";
+import { getContent, getMenu, getCopy } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default async function MenuPage() {
-  const [content, menu] = await Promise.all([getContent(), getMenu()]);
-  return <MenuExperience sections={menu} content={content} />;
+  const [content, menu, copy] = await Promise.all([getContent(), getMenu(), getCopy()]);
+  return <MenuExperience sections={menu} content={content} legal={copy.menu.legal} />;
 }

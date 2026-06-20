@@ -19,7 +19,15 @@ const LINE = "var(--color-line)";
 const MUTED = "var(--color-ink-dim)";
 const HEADER_BG = "color-mix(in oklab, var(--color-ink) 80%, var(--color-olive))";
 
-export function MenuExperience({ sections, content }: { sections: MenuSection[]; content: SiteContent }) {
+export function MenuExperience({
+  sections,
+  content,
+  legal,
+}: {
+  sections: MenuSection[];
+  content: SiteContent;
+  legal?: string;
+}) {
   const [dish, setDish] = useState<MenuItem | null>(null);
   const [reserveOpen, setReserveOpen] = useState(false);
   const [active, setActive] = useState(sections[0]?.title ?? "");
@@ -132,11 +140,20 @@ export function MenuExperience({ sections, content }: { sections: MenuSection[];
         </div>
       </div>
 
-      {/* Footer line */}
-      <footer className="border-t px-6 py-8 text-center" style={{ borderColor: LINE }}>
+      {/* Footer */}
+      <footer className="border-t px-6 py-10 text-center" style={{ borderColor: LINE }}>
         <p className="text-xs uppercase tracking-[0.25em]" style={{ color: MUTED }}>
           {content.legalName ?? "Mariposa Restaurant"} · Open daily {content.hours?.time ?? "13:00 – 24:00"}
         </p>
+        {legal ? (
+          <div className="mx-auto mt-6 max-w-2xl space-y-1.5">
+            {legal.split("\n").map((line, i) => (
+              <p key={i} className="text-[0.7rem] leading-relaxed" style={{ color: MUTED }}>
+                {line}
+              </p>
+            ))}
+          </div>
+        ) : null}
       </footer>
 
       {dish ? (
