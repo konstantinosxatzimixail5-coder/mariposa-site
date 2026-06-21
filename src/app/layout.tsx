@@ -53,6 +53,9 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   icons: { icon: "/favicon.svg" },
+  // Google Search Console site verification (renders
+  // <meta name="google-site-verification" …> in every page's <head>).
+  verification: { google: "lY3VsOme5oK7vjn6f9BCsy5Vqy5mqN61YRW4-NqZf2o" },
 };
 
 export const viewport: Viewport = {
