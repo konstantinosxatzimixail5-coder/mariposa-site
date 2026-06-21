@@ -40,7 +40,7 @@ const ALL_DAYS = [
 ] as const;
 
 const DESCRIPTION =
-  "Family-run Mediterranean cooking in a garden above the Aegean. Vegetables raised in our own beds, served beneath the vines of Theologos, Rhodes.";
+  "Family-run Mediterranean restaurant in Theologos, Rhodes, Greece — Greek and Italian cooking from our own garden, served beneath the vines above the Aegean.";
 
 export function RestaurantSchema() {
   const address = {
@@ -89,6 +89,17 @@ export function RestaurantSchema() {
       latitude: BRAND.geo.lat,
       longitude: BRAND.geo.lng,
     },
+    // Place chain — village → island/country → country — so engines resolve the
+    // venue to Rhodes, Greece without the copy spelling it out everywhere.
+    containedInPlace: {
+      "@type": "Place",
+      name: "Rhodes, Greece",
+      containedInPlace: { "@type": "Country", name: "Greece" },
+    },
+    areaServed: [
+      { "@type": "Place", name: "Rhodes" },
+      { "@type": "Place", name: "Rhodes Island, Greece" },
+    ],
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",

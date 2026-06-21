@@ -15,6 +15,7 @@
     "remotion:render": "remotion render remotion/index.ts HeroLoop public/video/hero.mp4 --codec=h264 && remotion render remotion/index.ts HeroLoop public/video/hero.webm --codec=vp9 && remotion still remotion/index.ts HeroLoop public/video/hero-poster.jpg --frame=90"
   },
   "dependencies": {
+    "@next/third-parties": "^15.5.9",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.1.4",
     "@react-three/postprocessing": "^3.0.4",

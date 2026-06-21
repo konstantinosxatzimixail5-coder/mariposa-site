@@ -1,10 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { fraunces, inter } from "@/lib/fonts";
 import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
+// Homepage meta description (150 chars, under the 160 limit): entity + category
+// + location front-loaded for SEO/GEO/AIO, then cuisine, USPs and a CTA. Shared
+// with og:description and twitter:description below.
 const DESCRIPTION =
-  "Family-run Mediterranean cooking in a garden above the Aegean. Vegetables raised in our own beds, served beneath the vines of Theologos, Rhodes. 4.9★ on Tripadvisor, Travelers' Choice 2025.";
+  "Award-winning Mediterranean restaurant in Rhodes, Greece. Garden-grown Greek & Italian dishes, daily-changing menu, Aegean views. Reserve at Mariposa.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mariposa.restaurant"),
@@ -73,7 +78,28 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <head>
+        {/* Warm up the Sanity asset CDN (dish/gallery images) so they connect
+            without a cold DNS/TLS round-trip. */}
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+      </head>
+      <body>
+        {/* Google Consent Mode v2 — default every non-essential type to denied
+            BEFORE GTM loads, for GDPR (Greece/EU). This is a tiny inline stub (no
+            network request); it must run before GTM, hence beforeInteractive.
+            TODO: wire a cookie-consent banner to call
+            gtag('consent','update',{...}) when the visitor accepts. */}
+        <Script id="consent-default" strategy="beforeInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});`}
+        </Script>
+        {/* Google Tag Manager — official @next/third-parties component: injects
+            the head loader (afterInteractive, non-blocking) and the <noscript>
+            iframe. GA4 is configured inside the GTM container, so no separate
+            gtag.js tag is added here (avoids double-counting). */}
+        <GoogleTagManager gtmId="GTM-KB7XQXGB" />
+        {children}
+      </body>
     </html>
   );
 }
