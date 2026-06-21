@@ -282,7 +282,13 @@ export const BRAND = {
       line: "Dinners for executives, companies and associations, hosted with the same care as our own table.",
     },
   ],
-  heroVideo: "/video/mariposa-hero-4k.mp4",
+  // Hero background loop. We ship the well-compressed encodes (webm ~370KB, mp4
+  // ~1.4MB) rather than the 12MB 4K master, and a lightweight poster still that
+  // is the server-rendered LCP element. The 4K file stays in /public for anyone
+  // who wants the master, but is never sent to visitors.
+  heroPoster: "/video/hero-poster.jpg",
+  heroVideoWebm: "/video/hero.webm",
+  heroVideo: "/video/hero.mp4",
 } as const;
 
 export type Service = (typeof BRAND.services)[number];

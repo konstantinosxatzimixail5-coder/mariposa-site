@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
+    // Inline critical CSS and defer the rest so the stylesheet stops blocking
+    // first paint (Critters).
+    optimizeCss: true,
+  },
+  // Long-lived immutable caching for the static hero media in /public/video.
+  async headers() {
+    return [
+      {
+        source: "/video/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
   },
 };
 
