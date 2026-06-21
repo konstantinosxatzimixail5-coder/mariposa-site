@@ -117,24 +117,24 @@ export function Testimonials({
             <ChevronLeft className="h-5 w-5" aria-hidden />
           </button>
 
-          <ul className="flex items-center gap-2.5" role="tablist" aria-label="Choose review">
+          {/* Carousel dots: a labelled button group (not a tablist — there are
+              no per-dot tabpanels, and the section is already a live carousel).
+              The active dot is marked with aria-current. */}
+          <div className="flex items-center gap-2.5" role="group" aria-label="Choose review">
             {items.map((t, i) => (
-              <li key={t.author}>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={i === index}
-                  aria-label={t.city ? `${t.author}, ${t.city}` : t.author}
-                  onClick={() => setIndex(i)}
-                  className="block h-2 w-2 rounded-full transition-colors duration-300"
-                  style={{
-                    background:
-                      i === index ? "var(--color-amber)" : "var(--color-line)",
-                  }}
-                />
-              </li>
+              <button
+                key={t.author}
+                type="button"
+                aria-current={i === index ? "true" : undefined}
+                aria-label={`Show review from ${t.city ? `${t.author}, ${t.city}` : t.author}`}
+                onClick={() => setIndex(i)}
+                className="block h-2 w-2 rounded-full transition-colors duration-300"
+                style={{
+                  background: i === index ? "var(--color-amber)" : "var(--color-line)",
+                }}
+              />
             ))}
-          </ul>
+          </div>
 
           <button
             type="button"
