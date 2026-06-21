@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Parallax } from "@/components/Parallax";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { HeroVideo } from "@/components/HeroVideo";
@@ -44,21 +45,22 @@ export function Hero({
         />
       </Parallax>
 
-      {/* Server-rendered hero poster — the LCP element. ~19KB, painted on first
-          byte with high priority, so the largest paint never waits on JS or on
-          the video bytes. The video fades in over it once (and if) it loads. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* Hero poster — the LCP element. Optimized + preloaded by next/image
+          (priority → fetchpriority="high"), painted immediately so the largest
+          paint never waits on JS or on the video bytes. The video fades in over
+          it once it loads. */}
+      <Image
         src={BRAND.heroPoster}
         alt=""
         aria-hidden
-        fetchPriority="high"
-        decoding="async"
-        className="absolute inset-0 -z-[9] h-full w-full object-cover"
+        priority
+        fill
+        sizes="100vw"
+        className="-z-[9] object-cover"
         style={{ opacity: 0.55 }}
       />
 
-      {/* The cinematic loop, lazily loaded above the poster. */}
+      {/* The cinematic loop, deferred and layered above the poster. */}
       <HeroVideo />
 
       {/* Dappled light through leaves — drifts slowly over the type, behind it. */}

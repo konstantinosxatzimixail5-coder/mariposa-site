@@ -282,11 +282,16 @@ export const BRAND = {
       line: "Dinners for executives, companies and associations, hosted with the same care as our own table.",
     },
   ],
-  // Hero background loop. We ship the well-compressed encodes (webm ~370KB, mp4
-  // ~1.4MB) rather than the 12MB 4K master, and a lightweight poster still that
-  // is the server-rendered LCP element. The 4K file stays in /public for anyone
-  // who wants the master, but is never sent to visitors.
+  // Hero background loop. The poster still is the server-rendered LCP element;
+  // the video is deferred and never the 12MB 4K master (kept only as the encode
+  // source). Optimized cinematic encodes (1080p/720p) are generated from the 4K
+  // via ffmpeg — see docs/hero-video-encoding.md. The small `hero.webm/mp4`
+  // remain as trailing fallbacks so the hero plays even before those are added.
   heroPoster: "/video/hero-poster.jpg",
+  heroVideo1080Webm: "/video/hero-1080.webm",
+  heroVideo1080: "/video/hero-1080.mp4",
+  heroVideo720: "/video/hero-720.mp4",
+  // Fallback encodes already in the repo (used until the cinematic ones land).
   heroVideoWebm: "/video/hero.webm",
   heroVideo: "/video/hero.mp4",
 } as const;
