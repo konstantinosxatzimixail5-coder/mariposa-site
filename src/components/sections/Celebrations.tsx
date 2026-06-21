@@ -44,6 +44,7 @@ export function Celebrations({
               alt="A celebration dinner laid out beneath the vines at Mariposa, Theologos, Rhodes"
               fill
               priority={false}
+              quality={65}
               sizes="100vw"
               className="object-cover"
             />
