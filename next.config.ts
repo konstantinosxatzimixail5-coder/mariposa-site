@@ -16,6 +16,18 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
+  // Long-lived immutable caching for the static hero media in /public/video.
+  // These files are content-stable; serving them with a one-year immutable
+  // header lets the Vercel CDN and browsers reuse them across visits (the
+  // single biggest lever for slow-connection regions on repeat views).
+  async headers() {
+    return [
+      {
+        source: "/video/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

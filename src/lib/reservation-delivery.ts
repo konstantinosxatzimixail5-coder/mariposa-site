@@ -15,9 +15,9 @@
  * A channel whose env vars are absent is reported as "skipped" (not "failed"),
  * so local development without credentials still succeeds end-to-end.
  */
-import { Resend } from "resend";
 import twilio from "twilio";
 import { BRAND } from "@/lib/brand";
+import { sendEmail as sendTransactionalEmail, linesToHtml } from "@/lib/email";
 
 export type Booking = {
   name: string;
@@ -57,44 +57,15 @@ function formatLines(b: Booking): string[] {
   ].filter((line): line is string => line !== null);
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
 async function sendEmail(b: Booking): Promise<ChannelOutcome> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESERVATION_FROM_EMAIL;
-  // Falls back to the restaurant's published address if no override is set.
-  const to = process.env.RESERVATION_TO_EMAIL || BRAND.email;
-
-  if (!apiKey || !from || !to) return "skipped";
-
   const lines = formatLines(b);
-  const resend = new Resend(apiKey);
-  const { error } = await resend.emails.send({
-    from,
-    to,
-    subject: `New reservation request — ${b.name}, ${b.date} ${b.time} (${b.party})`,
+  // Reservations have no email field, so no reply-to; the phone is in the body.
+  const { outcome } = await sendTransactionalEmail({
+    subject: `New reservation request — ${b.name}, ${b.party} guests, ${b.date} ${b.time}`,
     text: `New reservation request\n\n${lines.join("\n")}`,
-    html:
-      `<h2 style="font-family:Georgia,serif;color:#1e1b16">New reservation request</h2>` +
-      `<table style="font-family:Arial,sans-serif;font-size:15px;color:#1e1b16;border-collapse:collapse">` +
-      lines
-        .map((line) => {
-          const [label, ...rest] = line.split(": ");
-          return `<tr><td style="padding:4px 16px 4px 0;color:#8a6a30;font-weight:bold">${escapeHtml(
-            label ?? "",
-          )}</td><td style="padding:4px 0">${escapeHtml(rest.join(": "))}</td></tr>`;
-        })
-        .join("") +
-      `</table>`,
+    html: linesToHtml(lines, "New reservation request"),
   });
-
-  return error ? "failed" : "sent";
+  return outcome;
 }
 
 async function sendWhatsApp(b: Booking): Promise<ChannelOutcome> {
