@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { deliverReservation, type Booking } from "@/lib/reservation-delivery";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 /**
  * Reservation intake.
@@ -41,6 +42,7 @@ type ReservationPayload = {
   party?: unknown;
   occasion?: unknown;
   note?: unknown;
+  company?: unknown; // honeypot — must stay empty
 };
 
 function isNonEmptyString(v: unknown): v is string {
@@ -48,11 +50,24 @@ function isNonEmptyString(v: unknown): v is string {
 }
 
 export async function POST(request: Request) {
+  if (!rateLimit(`reservations:${clientIp(request)}`)) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Please try again in a minute." },
+      { status: 429 },
+    );
+  }
+
   let body: ReservationPayload;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ ok: false, error: "Malformed request." }, { status: 400 });
+  }
+
+  // Honeypot: real guests never fill `company`. If set, acknowledge silently
+  // (200) without delivering anything.
+  if (isNonEmptyString(body.company)) {
+    return NextResponse.json({ ok: true, message: "Reservation request received." });
   }
 
   const errors: string[] = [];

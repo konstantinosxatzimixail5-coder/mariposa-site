@@ -3,6 +3,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { BRAND, type SiteContent } from "@/lib/brand";
+import { Honeypot } from "@/components/Honeypot";
 
 /**
  * Reservation request form — wired to /api/reservations.
@@ -80,6 +81,7 @@ export function ReservationForm({ occasions = BRAND.occasions }: { occasions?: S
       party: Number(data.get("party") ?? 0),
       occasion: String(data.get("occasion") ?? "none"),
       note: String(data.get("note") ?? "").trim(),
+      company: String(data.get("company") ?? ""), // honeypot
     };
 
     setStatus("submitting");
@@ -145,6 +147,7 @@ export function ReservationForm({ occasions = BRAND.occasions }: { occasions?: S
       className="rounded-xl border p-6 text-left md:p-8"
       style={{ borderColor: "var(--color-line)", background: "var(--color-surface)" }}
     >
+      <Honeypot />
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor={ids.name} className="mb-2 block text-sm text-ink">

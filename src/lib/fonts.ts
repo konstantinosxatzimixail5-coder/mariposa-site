@@ -10,8 +10,10 @@ export const fraunces = Fraunces({
   display: "swap",
   variable: "--font-fraunces",
   // Variable font: omit `weight` so the full wght axis ships; control weight in
-  // CSS. opsz drives optical sizing for big hero type.
-  axes: ["opsz", "SOFT", "WONK"],
+  // CSS. opsz drives optical sizing for big hero type. SOFT/WONK stay at their
+  // defaults (off) in CSS, so we don't request those axes here — trims the font
+  // payload with no visual change.
+  axes: ["opsz"],
   style: ["normal", "italic"],
 });
 

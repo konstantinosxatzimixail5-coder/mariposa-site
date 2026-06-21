@@ -340,6 +340,30 @@ button:disabled {
   transform: none;
 }
 
+/* ── Hero entrance (CSS-only, runs on load) ────────────────────────────────
+   Above-the-fold hero copy animates in purely from CSS keyframes so it is part
+   of the first server-rendered paint and never gated behind JS hydration (which
+   would delay the LCP heading). Reduced motion is handled in the block below. */
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-in {
+  animation: hero-in 0.8s var(--ease-entrance) both;
+}
+.hero-clip {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.12em;
+}
+@keyframes hero-clip-rise {
+  from { transform: translateY(110%); }
+  to { transform: none; }
+}
+.hero-clip-inner {
+  animation: hero-clip-rise 1s var(--ease-entrance) both;
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
    REDUCED MOTION — full fallback path
    ─────────────────────────────────────────────────────────────────────────── */

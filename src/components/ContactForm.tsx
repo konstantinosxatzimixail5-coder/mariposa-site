@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
+import { Honeypot } from "@/components/Honeypot";
 
 /**
  * Footer contact form — name / email / message, wired to /api/contact.
@@ -38,6 +39,7 @@ export function ContactForm() {
       name: String(data.get("name") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       message: String(data.get("message") ?? "").trim(),
+      company: String(data.get("company") ?? ""), // honeypot
     };
 
     setStatus("submitting");
@@ -98,6 +100,7 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="grid gap-4">
+      <Honeypot />
       <div>
         <label htmlFor={ids.name} className="mb-2 block text-sm text-ink">
           Name

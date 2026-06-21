@@ -70,6 +70,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+      <head>
+        {/* Warm up the Sanity asset CDN so dish/gallery images (served from
+            cdn.sanity.io once content is migrated) connect without a cold
+            DNS/TLS round-trip. */}
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+      </head>
       <body>{children}</body>
     </html>
   );

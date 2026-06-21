@@ -1,4 +1,3 @@
-import { Reveal } from "@/components/Reveal";
 import { Parallax } from "@/components/Parallax";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { HeroVideo } from "@/components/HeroVideo";
@@ -45,7 +44,21 @@ export function Hero({
         />
       </Parallax>
 
-      {/* Pre-rendered Remotion light-field loop, between gradient and canopy. */}
+      {/* Server-rendered hero poster — the LCP element. ~19KB, painted on first
+          byte with high priority, so the largest paint never waits on JS or on
+          the video bytes. The video fades in over it once (and if) it loads. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={BRAND.heroPoster}
+        alt=""
+        aria-hidden
+        fetchPriority="high"
+        decoding="async"
+        className="absolute inset-0 -z-[9] h-full w-full object-cover"
+        style={{ opacity: 0.55 }}
+      />
+
+      {/* The cinematic loop, lazily loaded above the poster. */}
       <HeroVideo />
 
       {/* Dappled light through leaves — drifts slowly over the type, behind it. */}
@@ -54,43 +67,38 @@ export function Hero({
         <span className="leaf-light leaf-light--b" />
       </div>
 
+      {/* Hero copy animates in via CSS on load (no JS / IntersectionObserver
+          gating), so the heading is part of the first server-rendered paint and
+          never held hidden waiting on hydration. `hero-in` degrades to the final
+          visible state under reduced motion. */}
       <div className="mx-auto w-full max-w-7xl">
-        <Reveal
-          variant="reveal"
-          as="p"
-          className="mb-6 flex items-center gap-3 text-sm uppercase tracking-[0.2em] text-amber sm:tracking-[0.25em]"
-        >
+        <p className="hero-in mb-6 flex items-center gap-3 text-sm uppercase tracking-[0.2em] text-amber sm:tracking-[0.25em]">
           <ButterflyMark className="h-5 w-5" />
           {content.address.locality} · {content.address.region}
-        </Reveal>
+        </p>
 
         <h1 className="font-display text-balance text-ivory" style={{ fontSize: "var(--text-display)" }}>
           {/* Names the entity in the page's one h1 for search/AI clarity without
               altering the visual line, which reads as the tagline. */}
           <span className="sr-only">{content.name} — </span>
-          <Reveal variant="clip-reveal" as="span" className="block">
-            {copy.headingLine1}
-          </Reveal>
-          <Reveal variant="clip-reveal" as="span" delay={140} className="block italic">
-            <span className="text-gold-bright">{copy.headingLine2}</span>
-          </Reveal>
+          <span className="hero-clip block">
+            <span className="hero-clip-inner block">{copy.headingLine1}</span>
+          </span>
+          <span className="hero-clip block italic">
+            <span className="hero-clip-inner block text-gold-bright" style={{ animationDelay: "140ms" }}>
+              {copy.headingLine2}
+            </span>
+          </span>
         </h1>
 
-        <Reveal
-          variant="reveal"
-          as="p"
-          delay={260}
-          className="mt-8 max-w-xl text-pretty text-lg text-ivory-dim"
-        >
+        <p className="hero-in mt-8 max-w-xl text-pretty text-lg text-ivory-dim" style={{ animationDelay: "260ms" }}>
           {copy.intro}
-        </Reveal>
+        </p>
 
         {/* CTAs stack full-width on phones, sit inline from sm up. */}
-        <Reveal
-          variant="reveal"
-          as="div"
-          delay={380}
-          className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+        <div
+          className="hero-in mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+          style={{ animationDelay: "380ms" }}
         >
           <a
             href={content.reservationUrl}
@@ -106,7 +114,7 @@ export function Hero({
           >
             {copy.secondaryCta}
           </a>
-        </Reveal>
+        </div>
       </div>
 
       <div className="mx-auto mt-12 flex w-full max-w-7xl items-center gap-3 text-xs uppercase tracking-[0.25em] text-ivory-dim sm:mt-16">
