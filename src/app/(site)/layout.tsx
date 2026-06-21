@@ -1,5 +1,6 @@
 import { Providers } from "@/components/Providers";
 import { RestaurantSchema } from "@/components/RestaurantSchema";
+import { CookieConsent } from "@/components/CookieConsent";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -23,6 +24,7 @@ export default function SiteLayout({
       </a>
       <Providers>{children}</Providers>
       <div className="grain" aria-hidden />
+      <CookieConsent />
       <Analytics />
       <SpeedInsights />
     </>
