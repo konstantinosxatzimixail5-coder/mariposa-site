@@ -2,8 +2,10 @@ import Image from "next/image";
 import { Parallax } from "@/components/Parallax";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { HeroVideo } from "@/components/HeroVideo";
+import { HeroAmbience } from "@/components/HeroAmbience";
 import { BRAND, type SiteContent } from "@/lib/brand";
 import { COPY, type Copy } from "@/lib/copy";
+import { getHeroSources } from "@/lib/hero-media";
 
 /**
  * Hero. Stacked background layers, back to front: the CSS gradient (-z-10, the
@@ -60,14 +62,13 @@ export function Hero({
         style={{ opacity: 0.55 }}
       />
 
-      {/* The cinematic loop, deferred and layered above the poster. */}
-      <HeroVideo />
+      {/* The cinematic loop, deferred and layered above the poster. Sources are
+          resolved on the server to the encodes that exist on disk. */}
+      <HeroVideo {...getHeroSources()} />
 
-      {/* Dappled light through leaves — drifts slowly over the type, behind it. */}
-      <div aria-hidden className="absolute inset-0 -z-[4] overflow-hidden">
-        <span className="leaf-light leaf-light--a" />
-        <span className="leaf-light leaf-light--b" />
-      </div>
+      {/* Dappled light through leaves — drifts slowly over the type, behind it.
+          Paused once the hero scrolls off-screen. */}
+      <HeroAmbience />
 
       {/* Hero copy animates in via CSS on load (no JS / IntersectionObserver
           gating), so the heading is part of the first server-rendered paint and

@@ -67,7 +67,8 @@ export function Garden({ copy = COPY.garden }: { copy?: Copy["garden"] }) {
                     src={BRAND.gallery[0]}
                     alt="The planted vegetable beds in the garden at Mariposa restaurant, Theologos, Rhodes"
                     fill
-                    sizes="(min-width: 768px) 25vw, 50vw"
+                    quality={65}
+                    sizes="(min-width: 1280px) 280px, (min-width: 768px) 22vw, 50vw"
                     className="object-cover"
                   />
                 </div>
@@ -78,7 +79,8 @@ export function Garden({ copy = COPY.garden }: { copy?: Copy["garden"] }) {
                     src={BRAND.gallery[1]}
                     alt="The vine-shaded dining terrace at Mariposa in late-afternoon light, Theologos, Rhodes"
                     fill
-                    sizes="(min-width: 768px) 25vw, 50vw"
+                    quality={65}
+                    sizes="(min-width: 1280px) 280px, (min-width: 768px) 22vw, 50vw"
                     className="object-cover"
                   />
                 </div>
@@ -96,7 +98,8 @@ export function Garden({ copy = COPY.garden }: { copy?: Copy["garden"] }) {
                   src={BEAT_MEDIA[i]?.image ?? BRAND.gallery[2]}
                   alt={BEAT_MEDIA[i]?.alt ?? ""}
                   fill
-                  sizes="(min-width: 768px) 30vw, 100vw"
+                  quality={65}
+                  sizes="(min-width: 1280px) 380px, (min-width: 768px) 30vw, 100vw"
                   className="object-cover"
                 />
               </div>

@@ -28,26 +28,41 @@ export function Testimonials({
   const items = content.reviews;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const go = useCallback(
     (dir: number) => setIndex((i) => (i + dir + items.length) % items.length),
     [items.length],
   );
 
-  // Calm auto-advance — off for reduced motion and while paused.
+  // Only run the carousel while it's actually on screen, so the auto-advance
+  // timer (and its re-renders) don't burn main-thread/battery off-screen.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setInView(!!entry?.isIntersecting), {
+      rootMargin: "0px 0px -10% 0px",
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Calm auto-advance — off for reduced motion, while paused, or off-screen.
   const timer = useRef<number | null>(null);
   useEffect(() => {
-    if (reducedMotion || paused) return;
+    if (reducedMotion || paused || !inView) return;
     timer.current = window.setInterval(() => go(1), AUTO_MS);
     return () => {
       if (timer.current) window.clearInterval(timer.current);
     };
-  }, [reducedMotion, paused, go]);
+  }, [reducedMotion, paused, inView, go]);
 
   const current = items[index]!;
 
   return (
     <section
+      ref={sectionRef}
       id="reviews"
       className="section-beige border-t"
       style={{ borderColor: "var(--color-line)", paddingBlock: "var(--space-section)" }}

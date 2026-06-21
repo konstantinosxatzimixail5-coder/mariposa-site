@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   transpilePackages: ["three"],
   images: {
     formats: ["image/avif", "image/webp"],
+    // Allowed `quality` values (65 for gallery/background photos, 75 default).
+    qualities: [65, 75],
     // Sanity-hosted images (dishes, services, family portraits) come from the
     // asset CDN once content is migrated into the dataset.
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],

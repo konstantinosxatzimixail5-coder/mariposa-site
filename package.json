@@ -45,8 +45,7 @@
     "safari >= 15.4",
     "ios_saf >= 15.4",
     "samsung >= 18",
-    "opera >= 79",
-    "not dead"
+    "opera >= 79"
   ],
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

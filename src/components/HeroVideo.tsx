@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { BRAND } from "@/lib/brand";
+import type { VideoSource } from "@/lib/hero-media";
 
 /**
  * The restaurant's cinematic hero loop, layered above the server-rendered poster
@@ -13,16 +14,21 @@ import { BRAND } from "@/lib/brand";
  *    fallback).
  *  - Save-Data / 2g → skip the download on either breakpoint, leave the poster.
  *  - Otherwise it mounts only AFTER first paint (on idle), with preload="none",
- *    then sets its source, plays, and fades in over the poster. The encode is
- *    chosen by viewport: 720p on small screens, 1080p (WebM → MP4) on larger.
- *    The small in-repo encodes are listed last as a fallback so the hero still
- *    plays before the cinematic 1080p/720p files are generated.
+ *    then sets its source, plays, and fades in over the poster. The encode set is
+ *    chosen by viewport (720p on small, 1080p on larger) and is resolved on the
+ *    server to the files that actually exist, so the video always plays.
  *
  * Muted + playsInline + loop so it autoplays everywhere without controls.
  */
 type NetworkInfo = { saveData?: boolean; effectiveType?: string };
 
-export function HeroVideo() {
+export function HeroVideo({
+  small: smallSources,
+  large: largeSources,
+}: {
+  small: VideoSource[];
+  large: VideoSource[];
+}) {
   const reducedMotion = useReducedMotion();
   const ref = useRef<HTMLVideoElement>(null);
   const [show, setShow] = useState(false);
@@ -55,13 +61,13 @@ export function HeroVideo() {
     return () => window.clearTimeout(id);
   }, [reducedMotion]);
 
-  // Once mounted, kick off playback (autoPlay covers most browsers; this is a
-  // belt-and-braces call for any that defer it with preload="none").
+  // Kick off playback once mounted (belt-and-braces for preload="none").
   useEffect(() => {
     if (show) ref.current?.play().catch(() => {});
   }, [show]);
 
-  if (reducedMotion || !show) return null;
+  const sources = small ? smallSources : largeSources;
+  if (reducedMotion || !show || sources.length === 0) return null;
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-[8] overflow-hidden">
@@ -77,18 +83,9 @@ export function HeroVideo() {
         className="h-full w-full object-cover transition-opacity duration-700"
         style={{ opacity: ready ? 0.55 : 0 }}
       >
-        {small ? (
-          <source src={BRAND.heroVideo720} type="video/mp4" />
-        ) : (
-          <>
-            <source src={BRAND.heroVideo1080Webm} type="video/webm" />
-            <source src={BRAND.heroVideo1080} type="video/mp4" />
-          </>
-        )}
-        {/* Fallbacks already in the repo — used until the cinematic encodes land,
-            and as a last resort. The browser falls through on a 404. */}
-        <source src={BRAND.heroVideoWebm} type="video/webm" />
-        <source src={BRAND.heroVideo} type="video/mp4" />
+        {sources.map((s) => (
+          <source key={s.src} src={s.src} type={s.type} />
+        ))}
       </video>
     </div>
   );
