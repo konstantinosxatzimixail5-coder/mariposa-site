@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import { fraunces, inter } from "@/lib/fonts";
 import { BRAND } from "@/lib/brand";
 import "./globals.css";
@@ -93,11 +93,15 @@ export default function RootLayout({
         <Script id="consent-default" strategy="beforeInteractive">
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});`}
         </Script>
-        {/* Google Tag Manager — official @next/third-parties component: injects
-            the head loader (afterInteractive, non-blocking) and the <noscript>
-            iframe. GA4 is configured inside the GTM container, so no separate
-            gtag.js tag is added here (avoids double-counting). */}
+        {/* Google Tag Manager + GA4 — official @next/third-parties components:
+            both load afterInteractive (non-blocking, LCP-safe) and respect the
+            Consent Mode defaults set above (analytics stays cookieless until the
+            banner grants consent).
+            IMPORTANT: GA4 (G-EJ1LSJ3489) is loaded directly here, so do NOT also
+            add a GA4 configuration tag inside the GTM-KB7XQXGB container — that
+            would double-count pageviews. Use GTM for other tags only. */}
         <GoogleTagManager gtmId="GTM-KB7XQXGB" />
+        <GoogleAnalytics gaId="G-EJ1LSJ3489" />
         {children}
       </body>
     </html>
