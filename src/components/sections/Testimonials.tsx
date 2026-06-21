@@ -120,7 +120,7 @@ export function Testimonials({
           {/* Carousel dots: a labelled button group (not a tablist — there are
               no per-dot tabpanels, and the section is already a live carousel).
               The active dot is marked with aria-current. */}
-          <div className="flex items-center gap-2.5" role="group" aria-label="Choose review">
+          <div className="flex items-center" role="group" aria-label="Choose review">
             {items.map((t, i) => (
               <button
                 key={t.author}
@@ -128,11 +128,18 @@ export function Testimonials({
                 aria-current={i === index ? "true" : undefined}
                 aria-label={`Show review from ${t.city ? `${t.author}, ${t.city}` : t.author}`}
                 onClick={() => setIndex(i)}
-                className="block h-2 w-2 rounded-full transition-colors duration-300"
-                style={{
-                  background: i === index ? "var(--color-amber)" : "var(--color-line)",
-                }}
-              />
+                // 8px visible dot inside a 28px padded hit area (WCAG 2.5.8 target
+                // size); the visible styling is unchanged.
+                className="flex h-7 w-7 items-center justify-center rounded-full"
+              >
+                <span
+                  aria-hidden
+                  className="block h-2 w-2 rounded-full transition-colors duration-300"
+                  style={{
+                    background: i === index ? "var(--color-amber)" : "var(--color-line)",
+                  }}
+                />
+              </button>
             ))}
           </div>
 

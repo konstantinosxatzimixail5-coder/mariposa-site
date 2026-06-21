@@ -37,6 +37,16 @@
     "three": "^0.171.0",
     "twilio": "^6.0.2"
   },
+  "browserslist": [
+    "chrome >= 93",
+    "edge >= 93",
+    "firefox >= 92",
+    "safari >= 15.4",
+    "ios_saf >= 15.4",
+    "samsung >= 18",
+    "opera >= 79",
+    "not dead"
+  ],
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@remotion/cli": "^4.0.457",
@@ -45,6 +55,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@types/three": "^0.171.0",
+    "critters": "^0.0.25",
     "eslint": "^9.18.0",
     "eslint-config-next": "15.5.4",
     "remotion": "^4.0.457",
