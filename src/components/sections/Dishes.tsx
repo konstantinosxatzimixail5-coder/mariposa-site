@@ -69,7 +69,8 @@ export function Dishes({
                     src={dish.image}
                     alt={`${dish.name} at Mariposa restaurant in Theologos, Rhodes — ${dish.tagline}`}
                     fill
-                    sizes="(min-width: 1024px) 18vw, (min-width: 768px) 30vw, 45vw"
+                    quality={65}
+                    sizes="(min-width: 1280px) 384px, (min-width: 768px) 30vw, 45vw"
                     className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.05]"
                   />
                   <div
