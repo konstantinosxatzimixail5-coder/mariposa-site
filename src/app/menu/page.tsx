@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { MenuExperience } from "@/components/menu/MenuExperience";
 import { RestaurantSchema } from "@/components/RestaurantSchema";
 import { getContent, getMenu, getCopy } from "@/lib/content";
-import { MENU_PUBLISHED } from "@/lib/flags";
+import { MENU_PUBLISHED, MENU_PREVIEW_KEY } from "@/lib/flags";
 
 export const dynamic = "force-dynamic";
 
@@ -34,9 +34,17 @@ export const metadata: Metadata = MENU_PUBLISHED
   : // Menu hidden for now: keep it out of the index while the page redirects.
     { title: "Menu", robots: { index: false, follow: false } };
 
-export default async function MenuPage() {
-  // The full menu is hidden for now — send any direct visit back to the home page.
-  if (!MENU_PUBLISHED) redirect("/");
+export default async function MenuPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ preview?: string }>;
+}) {
+  // The full menu is hidden from the public: redirect any normal visit home.
+  // A secret `?preview=<MENU_PREVIEW_KEY>` link still renders it (noindex), so
+  // the owner can view it privately without it becoming public.
+  const { preview } = await searchParams;
+  const previewing = preview === MENU_PREVIEW_KEY;
+  if (!MENU_PUBLISHED && !previewing) redirect("/");
 
   const [content, menu, copy] = await Promise.all([getContent(), getMenu(), getCopy()]);
   return (
