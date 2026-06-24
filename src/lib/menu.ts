@@ -14,6 +14,8 @@ export type MenuItem = {
   name: string;
   description?: string;
   price?: string;
+  /** Daily on/off switch from Sanity. Missing/true = shown; false = hidden. */
+  available?: boolean;
   vegetarian?: boolean;
   vegan?: boolean;
   glutenFree?: boolean;

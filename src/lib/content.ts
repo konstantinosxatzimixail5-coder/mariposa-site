@@ -8,7 +8,7 @@ const MENU_QUERY = /* groq */ `*[_type == "menuSection"]|order(order asc){
   title,
   subtitle,
   "items": items[]{
-    name, description, price, vegetarian, vegan, glutenFree, rating, reviewCount,
+    name, description, price, available, vegetarian, vegan, glutenFree, rating, reviewCount,
     "photo": photo.asset->url,
     "plated": plated.asset->url,
     "detail": detail.asset->url,
@@ -21,11 +21,22 @@ const MENU_QUERY = /* groq */ `*[_type == "menuSection"]|order(order asc){
 /**
  * Full à la carte menu for /menu. Reads Sanity (menuSection docs), falls back to
  * the static MENU when empty or unreachable.
+ *
+ * Dishes carry a daily on/off switch (`available` in Sanity): an item is hidden
+ * only when explicitly set to `false`, so missing/true stays visible (and the
+ * static fallback, which has no flag, shows everything). Sections left with no
+ * visible dishes are dropped so the page never shows an empty heading.
  */
 export async function getMenu(): Promise<MenuSection[]> {
   try {
     const data = await client.fetch<MenuSection[]>(MENU_QUERY, {}, { cache: "no-store" });
-    return data && data.length ? data : MENU;
+    const sections = data && data.length ? data : MENU;
+    return sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) => item.available !== false),
+      }))
+      .filter((section) => section.items.length > 0);
   } catch {
     return MENU;
   }

@@ -23,6 +23,13 @@ export const menuSection = defineType({
           name: "item",
           type: "object",
           fields: [
+            defineField({
+              name: "available",
+              title: "Available today",
+              type: "boolean",
+              description: "Daily on/off switch — turn off to hide this dish from the menu. On by default.",
+              initialValue: true,
+            }),
             defineField({ name: "name", title: "Name", type: "string", validation: (r) => r.required() }),
             defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
             defineField({ name: "price", title: "Price (number only, e.g. 14)", type: "string" }),
@@ -60,7 +67,17 @@ export const menuSection = defineType({
               ],
             }),
           ],
-          preview: { select: { title: "name", subtitle: "price", media: "photo" } },
+          preview: {
+            select: { title: "name", price: "price", media: "photo", available: "available" },
+            prepare({ title, price, media, available }) {
+              const off = available === false;
+              return {
+                title: off ? `⚪️ ${title}` : title,
+                subtitle: off ? "Hidden today" : price ? `€${price}` : "",
+                media,
+              };
+            },
+          },
         }),
       ],
     }),
