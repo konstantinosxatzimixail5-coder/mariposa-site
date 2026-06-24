@@ -198,6 +198,7 @@ async function run() {
         name: it.name,
         description: it.description,
         price: it.price,
+        available: it.available ?? true,
         vegetarian: it.vegetarian,
         vegan: it.vegan,
         glutenFree: it.glutenFree,
