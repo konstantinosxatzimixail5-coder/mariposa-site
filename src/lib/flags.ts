@@ -33,7 +33,7 @@ export const RESERVATION_FORM_ENABLED = false;
 
 /**
  * Reservation WhatsApp number in wa.me form (country code + number, no `+`).
- * +30 690 648 9705.
+ * +30 690 648 9686 — the restaurant's main number shown in "Prefer to call?".
  */
-export const RESERVATION_WHATSAPP = "306906489705";
+export const RESERVATION_WHATSAPP = "306906489686";
 
