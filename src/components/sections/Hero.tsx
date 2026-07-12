@@ -1,7 +1,6 @@
-import Image from "next/image";
 import { Parallax } from "@/components/Parallax";
 import { ButterflyMark } from "@/components/ButterflyMark";
-import { HeroVideo } from "@/components/HeroVideo";
+import { HeroBackground } from "@/components/HeroBackground";
 import { HeroAmbience } from "@/components/HeroAmbience";
 import { BRAND, type SiteContent } from "@/lib/brand";
 import { COPY, type Copy } from "@/lib/copy";
@@ -47,24 +46,10 @@ export function Hero({
         />
       </Parallax>
 
-      {/* Hero poster — the LCP element. Optimized + preloaded by next/image
-          (priority → fetchpriority="high"), painted immediately so the largest
-          paint never waits on JS or on the video bytes. The video fades in over
-          it once it loads. */}
-      <Image
-        src={BRAND.heroPoster}
-        alt=""
-        aria-hidden
-        priority
-        fill
-        sizes="100vw"
-        className="-z-[9] object-cover"
-        style={{ opacity: 0.55 }}
-      />
-
-      {/* The cinematic loop, deferred and layered above the poster. Sources are
-          resolved on the server to the encodes that exist on disk. */}
-      <HeroVideo {...getHeroSources()} />
+      {/* Poster (LCP) + cinematic video in one layer that cross-fades between
+          them, so the two never blend into a double image. Sources are resolved
+          on the server to the encodes that exist on disk. */}
+      <HeroBackground {...getHeroSources()} />
 
       {/* Dappled light through leaves — drifts slowly over the type, behind it.
           Paused once the hero scrolls off-screen. */}
