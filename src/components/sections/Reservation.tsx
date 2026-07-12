@@ -2,16 +2,10 @@ import { Phone, MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import { ReservationForm } from "@/components/ReservationForm";
+import { WhatsAppReservationForm } from "@/components/WhatsAppReservationForm";
 import { BRAND, type SiteContent } from "@/lib/brand";
 import { COPY, type Copy } from "@/lib/copy";
-import { RESERVATION_FORM_ENABLED, RESERVATION_WHATSAPP } from "@/lib/flags";
-
-// Prefilled WhatsApp request so guests send a structured booking the moment they
-// tap through — and the restaurant's chat becomes the record of who asked for what.
-const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Hello Mariposa! I'd like to request a table.\n\nName:\nDate:\nTime:\nGuests:\nOccasion (optional):",
-);
-const WHATSAPP_HREF = `https://wa.me/${RESERVATION_WHATSAPP}?text=${WHATSAPP_MESSAGE}`;
+import { RESERVATION_FORM_ENABLED } from "@/lib/flags";
 
 /**
  * Reservation. The conversion moment — a real booking form wired to
@@ -77,19 +71,11 @@ export function Reservation({
               </div>
             </>
           ) : (
-            // Reservations are taken on WhatsApp for now (the form is hidden).
-            <div className="flex flex-col items-center gap-5">
-              <a
-                href={WHATSAPP_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full max-w-sm items-center justify-center gap-2.5 rounded-full px-8 py-4 font-medium text-[color:var(--color-on-accent)] transition-[background-color] duration-200 hover:bg-amber-bright"
-                style={{ background: "var(--color-amber)" }}
-              >
-                <MessageCircle className="h-5 w-5" aria-hidden />
-                Reserve on WhatsApp
-              </a>
-              <p className="text-sm text-muted">
+            // Reservations are taken on WhatsApp: the form builds a wa.me link
+            // the guest sends from their own phone (no server, no cost).
+            <>
+              <WhatsAppReservationForm />
+              <p className="mt-8 text-sm text-muted">
                 Prefer to call?{" "}
                 <a
                   href={content.phoneHref}
@@ -99,7 +85,7 @@ export function Reservation({
                   {content.phone}
                 </a>
               </p>
-            </div>
+            </>
           )}
         </Reveal>
       </div>
