@@ -20,13 +20,11 @@ import { RESERVATION_WHATSAPP } from "@/lib/flags";
  */
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || RESERVATION_WHATSAPP;
 
-// The service windows guests can book into.
-const TIME_SLOTS = [
-  "Breakfast · 09:00 – 11:30",
-  "Lunch · 12:00 – 15:30",
-  "Dinner (first seating) · 17:30 – 19:15",
-  "Dinner (second seating) · 19:15 – 22:15",
-] as const;
+// The service windows guests can book into. Breakfast and Lunch are single
+// windows; Dinner is split into two sittings with specific start times.
+const SERVICE_SLOTS = ["Breakfast · 09:00 – 11:30", "Lunch · 12:00 – 15:30"] as const;
+const DINNER_FIRST = ["17:30", "17:40", "17:50", "18:10", "18:20", "18:40", "18:50", "19:10", "19:20"] as const;
+const DINNER_SECOND = ["20:15", "20:40", "20:50", "21:10", "21:20", "21:40", "21:50", "22:10", "22:15"] as const;
 
 const FIELD_CLASS =
   "w-full rounded-md border bg-[var(--color-surface)] px-4 py-3 text-ink transition-colors duration-200 placeholder:text-muted focus:border-[color:var(--color-amber-deep)]";
@@ -149,11 +147,25 @@ export function WhatsAppReservationForm() {
             <option value="" disabled>
               Choose a time
             </option>
-            {TIME_SLOTS.map((slot) => (
+            {SERVICE_SLOTS.map((slot) => (
               <option key={slot} value={slot}>
                 {slot}
               </option>
             ))}
+            <optgroup label="Dinner — first sitting">
+              {DINNER_FIRST.map((t) => (
+                <option key={`first-${t}`} value={`Dinner (first sitting) · ${t}`}>
+                  {t}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="Dinner — second sitting">
+              {DINNER_SECOND.map((t) => (
+                <option key={`second-${t}`} value={`Dinner (second sitting) · ${t}`}>
+                  {t}
+                </option>
+              ))}
+            </optgroup>
           </select>
         </div>
 
