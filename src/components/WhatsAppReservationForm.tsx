@@ -20,8 +20,13 @@ import { RESERVATION_WHATSAPP } from "@/lib/flags";
  */
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || RESERVATION_WHATSAPP;
 
-// The three service windows guests can book into.
-const TIME_SLOTS = ["12:00 – 15:30", "15:30 – 18:00", "18:00 – 23:00"] as const;
+// The service windows guests can book into.
+const TIME_SLOTS = [
+  "Breakfast · 09:00 – 11:30",
+  "Lunch · 12:00 – 15:30",
+  "Dinner (first seating) · 17:30 – 19:15",
+  "Dinner (second seating) · 19:15 – 22:15",
+] as const;
 
 const FIELD_CLASS =
   "w-full rounded-md border bg-[var(--color-surface)] px-4 py-3 text-ink transition-colors duration-200 placeholder:text-muted focus:border-[color:var(--color-amber-deep)]";
