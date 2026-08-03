@@ -7,11 +7,10 @@ import { join } from "node:path";
  * /public/video — emitting exactly ONE resolution tier per breakpoint so the
  * browser downloads a single file, never all the fallbacks.
  *
- * Tiers are tried in order; the first whose files exist wins. The 12MB 4K master
- * (mariposa-hero-4k.mp4) is the encode source and is only ever a last resort if
- * no optimized encode is present — so on the live site only hero-720.mp4 (mobile)
- * or hero-1080.* (desktop) is served. The video is deferred and never the LCP
- * element. See docs/hero-video-encoding.md.
+ * Tiers are tried in order; the first whose files exist wins. Only hero-720.mp4
+ * (mobile) or hero-1080.mp4 (desktop) is ever served — both full-length encodes
+ * of the cinematic footage. The video is deferred and never the LCP element.
+ * See docs/hero-video-encoding.md.
  */
 export type VideoSource = { src: string; type: string };
 
@@ -20,18 +19,17 @@ const exists = (src: string) => existsSync(join(PUBLIC, src.replace(/^\//, "")))
 
 // Each entry is one tier (same footage, possibly multiple formats). Pick the
 // first tier that exists on disk; emit only that tier's files.
+// NOTE: mariposa-hero-4k.mp4 (12MB) is deliberately NOT listed. It is the encode
+// source only — never served to a visitor. If an encode is missing the hero
+// simply keeps the poster, which is far better than shipping 12MB.
 const LARGE_TIERS: VideoSource[][] = [
-  [
-    { src: "/video/hero-1080.webm", type: "video/webm" },
-    { src: "/video/hero-1080.mp4", type: "video/mp4" },
-  ],
-  [{ src: "/video/mariposa-hero-4k.mp4", type: "video/mp4" }],
+  [{ src: "/video/hero-1080.mp4", type: "video/mp4" }],
+  [{ src: "/video/hero-720.mp4", type: "video/mp4" }],
 ];
 
 const SMALL_TIERS: VideoSource[][] = [
   [{ src: "/video/hero-720.mp4", type: "video/mp4" }],
   [{ src: "/video/hero-1080.mp4", type: "video/mp4" }],
-  [{ src: "/video/mariposa-hero-4k.mp4", type: "video/mp4" }],
 ];
 
 function pickTier(tiers: VideoSource[][]): VideoSource[] {
