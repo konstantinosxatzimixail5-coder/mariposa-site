@@ -8,7 +8,11 @@ import { useLenis } from "./SmoothScroll";
 import { ButterflyMark } from "./ButterflyMark";
 import { BRAND } from "@/lib/brand";
 
-const DURATION = 2300; // ms — slow, weighty
+// Kept short on purpose: the overlay is opaque and covers the hero, so every
+// millisecond here is added directly to the desktop LCP and to the time before
+// the page can be scrolled. 900ms preserves the intro beat without the cost
+// (it was 2300ms, which pushed LCP past 2.6s on desktop).
+const DURATION = 900;
 const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
 export function Preloader() {
@@ -51,7 +55,7 @@ export function Preloader() {
         raf = requestAnimationFrame(tick);
       } else {
         // Brief hold on 100, then reveal.
-        window.setTimeout(() => setDone(true), 320);
+        window.setTimeout(() => setDone(true), 120);
       }
     };
     raf = requestAnimationFrame(tick);
@@ -101,7 +105,7 @@ export function Preloader() {
           className="fixed inset-0 flex flex-col items-center justify-center"
           style={{ zIndex: "var(--z-preloader)", background: "var(--color-ink)" }}
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } }}
+          exit={{ opacity: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
           role="status"
           aria-label={`Loading Mariposa, ${progress} percent`}
         >
