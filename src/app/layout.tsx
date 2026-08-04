@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
+import { MetaPixel } from "@/components/MetaPixel";
 import { fraunces, inter } from "@/lib/fonts";
 import { BRAND } from "@/lib/brand";
 import "./globals.css";
@@ -102,6 +103,11 @@ export default function RootLayout({
             would double-count pageviews. Use GTM for other tags only. */}
         <GoogleTagManager gtmId="GTM-KB7XQXGB" />
         <GoogleAnalytics gaId="G-EJ1LSJ3489" />
+        {/* Meta (Facebook) Pixel — the ad-side counterpart to the tags above:
+            PageView plus Lead (reservation request) and Contact conversions.
+            Also afterInteractive. Unlike Google's tags it does NOT wait for the
+            cookie banner, and it skips /studio itself — see the component. */}
+        <MetaPixel />
         {children}
       </body>
     </html>

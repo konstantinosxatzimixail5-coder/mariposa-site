@@ -3,6 +3,7 @@
 import { useId, useMemo, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { RESERVATION_WHATSAPP } from "@/lib/flags";
+import { trackPixel } from "@/lib/meta-pixel";
 
 /**
  * WhatsApp reservation form — no server, no API, no cost.
@@ -74,6 +75,17 @@ export function WhatsAppReservationForm() {
     ]
       .filter(Boolean)
       .join("\n");
+
+    // Meta Pixel conversion — this click IS the booking request, so it's the
+    // event the ad campaigns optimise against. Fired *before* window.open, since
+    // handing off to WhatsApp backgrounds the page on mobile. Only non-personal
+    // context is sent: never the guest's name, number or notes.
+    trackPixel("Lead", {
+      content_name: "WhatsApp reservation request",
+      content_category: "reservation",
+      service_slot: form.slot,
+      num_guests: Number(form.guests) || undefined,
+    });
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
