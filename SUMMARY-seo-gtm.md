@@ -29,6 +29,11 @@ File: `src/app/layout.tsx` — the shared `DESCRIPTION` constant now feeds
 left unchanged.
 
 ## 3. Google Tag Manager — `GTM-KB7XQXGB`
+
+> **Superseded:** the container is now `GTM-NQWTBSMG`, which carries the Google Ads
+> conversion tags. See `SUMMARY-ads-conversions.md`. Everything below still
+> describes how the tag is loaded.
+
 File: `src/app/layout.tsx`, via the official **`@next/third-parties`** package
 (`GoogleTagManager`), pinned to `15.5.9` to match Next.
 - Injects the head loader **afterInteractive** (non-blocking, no render-blocking

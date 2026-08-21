@@ -15,13 +15,15 @@ import { META_PIXEL_ID, trackPixel } from "@/lib/meta-pixel";
  * excludes the one place it isn't wanted: the Sanity Studio at /studio, whose
  * traffic is the owner's own and would pollute the ad audiences.
  *
- * Three jobs:
+ * Two jobs:
  *  1. Inject the base snippet + the initial PageView. It loads
  *     `afterInteractive` — same as GTM/GA4 in `app/layout.tsx` — so the tracker
  *     never competes with the hero for bandwidth and the LCP work stays first.
  *  2. Mirror App Router client-side navigations as PageViews (the base snippet
  *     only runs once per full page load).
- *  3. Report phone / e-mail link clicks as `Contact`, via one delegated listener.
+ *
+ * Phone / e-mail clicks are reported as `Contact` from `ConversionLinks.tsx`,
+ * which tracks those links for Meta and Google together.
  *
  * NOTE ON CONSENT: this pixel loads for every visitor, independently of the
  * cookie banner (`CookieConsent.tsx`) — an explicit product decision. Google's
@@ -47,32 +49,6 @@ export function MetaPixel() {
     countedPath.current = pathname;
     if (!isFirstRun) trackPixel("PageView");
   }, [enabled, pathname]);
-
-  useEffect(() => {
-    if (!enabled) return;
-    // Phone and e-mail links are rendered by *server* components in several
-    // places (footer address + icon row, "Prefer to call?", the menu's
-    // reservation modal). One document-level listener covers all of them — and
-    // anything added later — without converting each to a client component.
-    function handleClick(event: MouseEvent) {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      const link = target.closest<HTMLAnchorElement>(
-        'a[href^="tel:"], a[href^="mailto:"]',
-      );
-      if (!link) return;
-      // No PII: the channel, not the number or address that was clicked.
-      trackPixel("Contact", {
-        content_name: link.href.startsWith("tel:") ? "Phone click" : "Email click",
-        content_category: "contact",
-      });
-    }
-
-    // Capture phase, so the event is recorded even if a handler further down
-    // stops propagation before it reaches the document.
-    document.addEventListener("click", handleClick, true);
-    return () => document.removeEventListener("click", handleClick, true);
-  }, [enabled]);
 
   if (!enabled) return null;
 

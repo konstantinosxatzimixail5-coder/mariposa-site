@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { trackPixel } from "@/lib/meta-pixel";
+import { trackConversion } from "@/lib/tracking";
 
 /**
  * Footer contact form — name / email / message, wired to /api/contact.
@@ -59,12 +60,13 @@ export function ContactForm() {
 
       if (res.ok && result.ok) {
         setStatus("success");
-        // Meta Pixel conversion — only on a delivered message, and without any
-        // of the submitted fields (no name, e-mail or message text).
+        // Conversions — only on a delivered message (never on click), and
+        // without any of the submitted fields (no name, e-mail or message text).
         trackPixel("Contact", {
           content_name: "Footer contact form",
           content_category: "contact",
         });
+        trackConversion("contact_form_submit");
         return;
       }
       setStatus("error");

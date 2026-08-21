@@ -4,6 +4,7 @@ import { useId, useMemo, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { RESERVATION_WHATSAPP } from "@/lib/flags";
 import { trackPixel } from "@/lib/meta-pixel";
+import { trackConversion } from "@/lib/tracking";
 
 /**
  * WhatsApp reservation form — no server, no API, no cost.
@@ -76,17 +77,27 @@ export function WhatsAppReservationForm() {
       .filter(Boolean)
       .join("\n");
 
-    // Meta Pixel conversion — this click IS the booking request, so it's the
-    // event the ad campaigns optimise against. Fired *before* window.open, since
-    // handing off to WhatsApp backgrounds the page on mobile. Only non-personal
-    // context is sent: never the guest's name, number or notes.
+    // Both ad platforms' primary conversion: this click IS the booking request.
+    // Reported only after the validation above, so an empty form never counts.
+    // Only non-personal context is sent — never the guest's name, number or
+    // notes. `guests` is what later lets a 6-cover booking be valued above a
+    // 2-cover one instead of treating them identically.
     trackPixel("Lead", {
       content_name: "WhatsApp reservation request",
       content_category: "reservation",
       service_slot: form.slot,
       num_guests: Number(form.guests) || undefined,
     });
+    trackConversion("reservation_request", {
+      guests: Number(form.guests) || undefined,
+      service: form.slot,
+      booking_date: form.date,
+    });
 
+    // Opened straight after the pushes, NOT from an eventCallback: window.open
+    // only survives inside the user's own gesture, so deferring it would get the
+    // hand-off eaten by the popup blocker. Nothing is lost by not waiting — the
+    // new tab leaves this page alive, so both beacons finish in their own time.
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };

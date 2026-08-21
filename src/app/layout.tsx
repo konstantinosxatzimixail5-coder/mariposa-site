@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import { MetaPixel } from "@/components/MetaPixel";
+import { ConversionLinks } from "@/components/ConversionLinks";
 import { fraunces, inter } from "@/lib/fonts";
 import { BRAND } from "@/lib/brand";
 import "./globals.css";
@@ -98,16 +99,21 @@ export default function RootLayout({
             both load afterInteractive (non-blocking, LCP-safe) and respect the
             Consent Mode defaults set above (analytics stays cookieless until the
             banner grants consent).
+            The container is GTM-NQWTBSMG, which holds the Google Ads conversion
+            tags (see SUMMARY-ads-conversions.md); it replaced GTM-KB7XQXGB.
             IMPORTANT: GA4 (G-EJ1LSJ3489) is loaded directly here, so do NOT also
-            add a GA4 configuration tag inside the GTM-KB7XQXGB container — that
-            would double-count pageviews. Use GTM for other tags only. */}
-        <GoogleTagManager gtmId="GTM-KB7XQXGB" />
+            add a GA4 configuration tag inside the container — that would
+            double-count pageviews. Use GTM for other tags only. */}
+        <GoogleTagManager gtmId="GTM-NQWTBSMG" />
         <GoogleAnalytics gaId="G-EJ1LSJ3489" />
         {/* Meta (Facebook) Pixel — the ad-side counterpart to the tags above:
             PageView plus Lead (reservation request) and Contact conversions.
             Also afterInteractive. Unlike Google's tags it does NOT wait for the
             cookie banner, and it skips /studio itself — see the component. */}
         <MetaPixel />
+        {/* Phone / e-mail / WhatsApp link clicks → Meta + the dataLayer events
+            that GTM turns into Ads conversions. Renders nothing. */}
+        <ConversionLinks />
         {children}
       </body>
     </html>

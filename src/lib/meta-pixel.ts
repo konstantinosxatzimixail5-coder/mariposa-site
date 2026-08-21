@@ -10,7 +10,7 @@
 /**
  * Pixel id — Events Manager → Data Sources.
  *
- * Baked in like `GTM-KB7XQXGB` / `G-EJ1LSJ3489` in `app/layout.tsx`: the id is
+ * Baked in like `GTM-NQWTBSMG` / `G-EJ1LSJ3489` in `app/layout.tsx`: the id is
  * public by definition (it ships inside the browser snippet and in the noscript
  * URL), so there is nothing to hide. Set `NEXT_PUBLIC_META_PIXEL_ID` to point a
  * deploy at a different pixel — an empty value disables the pixel entirely,
