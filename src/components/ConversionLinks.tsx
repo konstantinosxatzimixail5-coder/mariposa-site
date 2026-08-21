@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { trackPixel } from "@/lib/meta-pixel";
 import { trackConversion } from "@/lib/tracking";
@@ -23,9 +24,19 @@ import { trackConversion } from "@/lib/tracking";
  * The reservation button is NOT an anchor (it opens WhatsApp from JS), so it can
  * never match here. That's what keeps a booking from being counted twice, as
  * both `reservation_request` and `whatsapp_click`.
+ *
+ * Silent inside /studio, matching `MetaPixel`. The Studio is the owner's own CMS,
+ * and if any of its screens ever renders a `mailto:` support link, a click would
+ * otherwise post a real Ads conversion from an internal session and quietly feed
+ * Smart Bidding a lead that never existed.
  */
 export function ConversionLinks() {
+  const pathname = usePathname();
+  const enabled = !pathname.startsWith("/studio");
+
   useEffect(() => {
+    if (!enabled) return;
+
     function handleClick(event: MouseEvent) {
       const target = event.target;
       if (!(target instanceof Element)) return;
@@ -52,7 +63,7 @@ export function ConversionLinks() {
     // stops propagation before it reaches the document.
     document.addEventListener("click", handleClick, true);
     return () => document.removeEventListener("click", handleClick, true);
-  }, []);
+  }, [enabled]);
 
   return null;
 }
