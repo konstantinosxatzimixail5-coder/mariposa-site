@@ -259,6 +259,17 @@ body {
   to   { opacity: 0; transform: translateX(8%); }
 }
 
+/* Menu-page category sheet — the small-screen stand-in for the pill row. Drops
+   from under the sticky bar it is anchored to. */
+@keyframes menu-cats-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes menu-cats-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
 /* A short centred hairline with a node, a quiet divider motif between ideas. */
 .rule-leaf {
   display: inline-block;

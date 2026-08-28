@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Instagram, Facebook, MessageCircle } from "lucide-react";
 import { ButterflyMark } from "@/components/ButterflyMark";
 import type { SiteContent } from "@/lib/brand";
 import type { MenuItem, MenuSection } from "@/lib/menu";
+import { CategoryNav } from "./CategoryNav";
 import { StarRating } from "./StarRating";
 import { DishModal } from "./DishModal";
 import { ReservationModal } from "./ReservationModal";
@@ -37,6 +38,30 @@ export function MenuExperience({
     setActive(title);
     refs.current[title]?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  // Scroll-spy: the category nav names the section you are actually reading, not
+  // just the last one you tapped. The mobile hamburger shows that name in its
+  // collapsed bar, so a click-only `active` would sit there stating the wrong
+  // section for the whole scroll.
+  useEffect(() => {
+    const observed = sections
+      .map((s) => refs.current[s.title])
+      .filter((el): el is HTMLElement => el !== null && el !== undefined);
+    if (observed.length === 0) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const title = sections.find((s) => refs.current[s.title] === entry.target)?.title;
+          if (title) setActive(title);
+        }
+      },
+      // A band across the upper middle of the viewport, clear of the sticky bar.
+      { rootMargin: "-30% 0px -60% 0px", threshold: 0 },
+    );
+    observed.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [sections]);
 
   return (
     <div className="min-h-screen" style={{ background: BG, color: INK }}>
@@ -90,30 +115,8 @@ export function MenuExperience({
         <span className="mx-auto mt-8 block h-px w-16" style={{ background: "var(--color-amber-deep)" }} />
       </section>
 
-      {/* Category pills */}
-      <div className="sticky top-[4.3rem] z-40 px-6 py-4 md:px-10" style={{ background: "color-mix(in oklab, var(--color-bg) 88%, transparent)" }}>
-        <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-2.5">
-          {sections.map((s) => {
-            const on = active === s.title;
-            return (
-              <button
-                key={s.title}
-                type="button"
-                onClick={() => jump(s.title)}
-                className="rounded-full border px-5 py-2 text-center transition-colors"
-                style={{
-                  borderColor: on ? "var(--color-amber)" : LINE,
-                  background: on ? "var(--color-amber)" : SURFACE,
-                  color: on ? "var(--color-on-accent)" : INK,
-                }}
-              >
-                <span className="block text-xs font-medium uppercase tracking-[0.18em]">{s.title}</span>
-                {s.subtitle ? <span className="block text-[0.68rem] italic" style={{ color: on ? "var(--color-on-accent)" : MUTED }}>{s.subtitle}</span> : null}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* Category nav — pills on desktop, hamburger sheet on phones */}
+      <CategoryNav sections={sections} active={active} onSelect={jump} />
 
       {/* Sections */}
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 md:px-10">
